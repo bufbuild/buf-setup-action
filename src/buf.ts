@@ -1,0 +1,122 @@
+// Copyright 2020-2021 Buf Technologies, Inc.
+//
+// All rights reserved.
+
+import * as os from 'os';
+import * as path from 'path';
+import * as core from '@actions/core';
+import * as tc from '@actions/tool-cache';
+import {Octokit} from '@octokit/core';
+import { Error, isError } from './error';
+
+// versionPrefix is used in Github release names, and can
+// optionally be specified in the action's version parameter.
+const versionPrefix = "v";
+
+export async function getBuf(version: string): Promise<string|Error> {
+  const binaryPath = tc.find('buf', version, os.arch());
+  if (binaryPath !== '') {
+    core.info(`Found in cache @ ${binaryPath}`);
+    return binaryPath;
+  }
+
+  core.info(`Resolving the download URL for the current platform...`);
+  const downloadURL = await getDownloadURL(version);
+  if (isError(downloadURL)) {
+      return downloadURL
+  }
+
+  core.info(`Downloading buf version "${version}" from ${downloadURL}`);
+  const downloadPath = await tc.downloadTool(downloadURL);
+  core.info(`Successfully downloaded buf version "${version}" from ${downloadURL}`);
+
+  core.info('Extracting buf...');
+  const extractPath = await tc.extractTar(downloadPath);
+  core.info(`Successfully extracted buf to ${extractPath}`);
+
+  core.info('Adding buf to the cache...');
+  const cacheDir = await tc.cacheDir(
+    path.join(extractPath, 'buf'),
+    'buf',
+    version,
+    os.arch()
+  );
+  core.info(`Successfully cached buf to ${cacheDir}`);
+
+  return cacheDir;
+}
+
+// getDownloadURL resolves Buf's Github download URL for the
+// current architecture and platform.
+async function getDownloadURL(version: string): Promise<string|Error> {
+  let architecture = '';
+  switch (os.arch()) {
+    // The available architectures can be found at:
+    // https://nodejs.org/api/process.html#process_process_arch
+    case 'x64':
+      architecture = 'x86_64';
+      break;
+    default:
+      return {
+        errorMessage: `The "${os.arch()}" architecture is not supported with a Buf release.`
+      };
+  }
+  let platform = '';
+  switch (os.platform()) {
+    // The available platforms can be found at:
+    // https://nodejs.org/api/process.html#process_process_platform
+    case 'linux':
+      platform = 'Linux';
+      break;
+    default:
+      return {
+        errorMessage: `The "${os.platform()}" platform is not supported with a Buf release.`
+      };
+  }
+  // The asset name is determined by the buf release structure found at:
+  // https://github.com/bufbuild/buf/blob/8255257bd94c9f1b5faa27242211c5caad05be79/make/buf/scripts/release.bash#L102
+  const assetName = `buf-${platform}-${architecture}.tar.gz`
+  const octokit = new Octokit();
+  const {data: releases} = await octokit.request(
+    'GET /repos/{owner}/{repo}/releases',
+    {
+      owner: 'bufbuild',
+      repo: 'buf',
+    }
+  );
+  switch (version) {
+    case 'latest':
+      for (const asset of releases[0].assets) {
+        if (assetName === asset.name) {
+          return asset.browser_download_url;
+        }
+      }
+      break;
+    default:
+      for (const release of releases) {
+        if (releaseTagIsVersion(release.tag_name, version)) {
+          for (const asset of release.assets) {
+            if (assetName === asset.name) {
+              return asset.browser_download_url;
+            }
+          }
+        }
+      }
+  }
+  return {
+    errorMessage: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
+  };
+}
+
+// releaseTagIsVersion returns true if the given Github release tag is equivalent
+// to the user-specified version. Github releases include the 'v' prefix, but the
+// `buf --version` does not. Thus, we permit both versions, e.g. v0.38.0 and 0.38.0.
+function releaseTagIsVersion(releaseTag: string, version: string): boolean {
+  if (releaseTag.indexOf(versionPrefix) === 0) {
+    releaseTag = releaseTag.slice(versionPrefix.length)
+  }
+  if (version.indexOf(versionPrefix) === 0) {
+    version = version.slice(versionPrefix.length)
+  }
+  return releaseTag === version
+}

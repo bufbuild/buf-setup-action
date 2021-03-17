@@ -1,0 +1,11 @@
+name: 'buf-setup'
+description: >
+  Install buf for use in other jobs.
+inputs:
+  version:
+    description: 'The version of buf to setup.'
+    required: true
+    default: 'latest'
+runs:
+  using: 'node12'
+  main: './dist/main.js'
