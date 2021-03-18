@@ -1,6 +1,9 @@
 name: 'buf-setup'
 description: >
   Install buf for use in other jobs.
+branding:
+  icon: play
+  color: blue
 inputs:
   version:
     description: 'The version of buf to setup.'
