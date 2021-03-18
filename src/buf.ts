@@ -58,7 +58,7 @@ async function getDownloadURL(version: string): Promise<string|Error> {
       break;
     default:
       return {
-        errorMessage: `The "${os.arch()}" architecture is not supported with a Buf release.`
+        message: `The "${os.arch()}" architecture is not supported with a Buf release.`
       };
   }
   let platform = '';
@@ -70,7 +70,7 @@ async function getDownloadURL(version: string): Promise<string|Error> {
       break;
     default:
       return {
-        errorMessage: `The "${os.platform()}" platform is not supported with a Buf release.`
+        message: `The "${os.platform()}" platform is not supported with a Buf release.`
       };
   }
   // The asset name is determined by the buf release structure found at:
@@ -104,7 +104,7 @@ async function getDownloadURL(version: string): Promise<string|Error> {
       }
   }
   return {
-    errorMessage: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
+    message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
   };
 }
 

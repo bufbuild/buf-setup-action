@@ -9,28 +9,32 @@ import * as io from '@actions/io';
 import { getBuf } from './buf';
 import { Error, isError } from './error';
 
-export async function run() {
+export async function run(): Promise<void> {
     try {
         const result = await runSetup()
-        if (isError(result)) {
-            core.setFailed(result.errorMessage);
+        if (result !== null && isError(result)) {
+            core.setFailed(result.message);
         }
     } catch (error) {
         // In case we ever fail to catch an error
         // in the call chain, we catch the error
         // and mark the build as a failure. The
         // user is otherwise prone to false positives.
-        core.setFailed(error.message);
+        if (isError(error)) {
+            core.setFailed(error.message);
+            return;
+        }
+        core.setFailed('Internal error');
     }
 }
 
 // runSetup runs the buf-setup action, and returns
 // a non-empty error if it fails.
-async function runSetup(): Promise<void|Error> {
+async function runSetup(): Promise<null|Error> {
     const version = core.getInput('version');
     if (version === '') {
         return {
-            errorMessage: 'a version was not provided'
+            message: 'a version was not provided'
         };
     }
 
@@ -45,10 +49,12 @@ async function runSetup(): Promise<void|Error> {
     const binaryPath = await io.which('buf', true);
     if (binaryPath === '') {
         return {
-            errorMessage: 'buf was not found on PATH'
+            message: 'buf was not found on PATH'
         };
     }
 
     core.info(`Successfully setup buf version ${version}`);
     core.info(cp.execSync(`${binaryPath} --version`).toString());
+
+    return null;
 }

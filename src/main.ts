@@ -4,4 +4,4 @@
 
 import {run} from './run';
 
-run();
+void run();

@@ -1,6 +1,8 @@
 .PHONY: build
 build:
-	tsc && esbuild \
+	@tsc
+	@eslint ./src
+	@esbuild \
 		--minify \
 		--bundle \
 		--sourcemap \
