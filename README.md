@@ -12,7 +12,7 @@ steps:
   - uses: actions/checkout@v2
   - uses: bufbuild/buf-setup-action@v0.1.0
     with:
-      version: '0.40.0' # The version of buf to download and use.
+      version: '0.41.0' # The version of buf to download and use.
   - run: buf --version
 ```
 
