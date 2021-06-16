@@ -13,6 +13,7 @@ steps:
   - uses: bufbuild/buf-setup-action@v0.1.0
     with:
       version: '0.41.0' # The version of buf to download and use.
+      buf_token: ${{ secrets.BUF_TOKEN }}
   - run: buf --version
 ```
 

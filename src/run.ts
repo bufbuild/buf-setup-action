@@ -12,12 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import cp from 'child_process';
-import * as path from 'path';
+import * as child from 'child_process';
 import * as core from '@actions/core';
+import * as fs from 'fs';
 import * as io from '@actions/io';
+import * as path from 'path';
 import { getBuf } from './buf';
 import { Error, isError } from './error';
+
+// runnerTempEnvKey is the environment variable key
+// used to access a temporary directory. Although
+// undocumented in the Github Actions documentation,
+// this can be found in the @actions/tools-cache module.
+// https://github.com/actions/toolkit/blob/4bf916289e5e32bb7d1bd7f21842c3afeab3b25a/packages/tool-cache/src/tool-cache.ts#L701
+const runnerTempEnvKey = 'RUNNER_TEMP'
 
 export async function run(): Promise<void> {
     try {
@@ -64,7 +72,24 @@ async function runSetup(): Promise<null|Error> {
     }
 
     core.info(`Successfully setup buf version ${version}`);
-    core.info(cp.execSync(`${binaryPath} --version`).toString());
+    core.info(child.execSync(`${binaryPath} --version`).toString());
 
+    const bufToken = core.getInput('buf_token');
+    if (bufToken !== '') {
+        // If the BUF_TOKEN is set, add it to the runner's .netrc.
+        const tempDir = process.env[runnerTempEnvKey] ?? '';
+        if (tempDir === '') {
+            return {
+                message: `expected ${runnerTempEnvKey} to be defined`
+            };
+        }
+
+        // TODO: For now, we hard-code the 'buf.build' remote. This will
+        // need to be refactored once we support federation between other
+        // BSR remotes.
+        const netrcPath = path.join(tempDir, '.netrc');
+        fs.writeFileSync(netrcPath, `machine buf.build\npassword ${bufToken}`, { flag: 'w' });
+        process.env.NETRC = netrcPath;
+    }
     return null;
 }
