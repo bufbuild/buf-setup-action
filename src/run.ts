@@ -41,11 +41,10 @@ export async function run(): Promise<void> {
 // runSetup runs the buf-setup action, and returns
 // a non-empty error if it fails.
 async function runSetup(): Promise<null|Error> {
-    const version = core.getInput('version');
+    let version = core.getInput('version');
     if (version === '') {
-        return {
-            message: 'a version was not provided'
-        };
+        // If version is not provided, default to 'latest'.
+        version = 'latest'
     }
 
     core.info(`Setting up buf version "${version}"`);
