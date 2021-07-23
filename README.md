@@ -6,14 +6,13 @@ Install and setup [buf](https://github.com/bufbuild/buf) for use in other action
 
 Refer to the [action.yml](https://github.com/bufbuild/buf-setup-action/blob/master/action.yml)
 to see all of the action parameters.
+
 If `version` is unspecified, it will be defaulted to `latest`.
 
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.3.0
-    with:
-      version: '0.41.0' # The version of buf to download and use.
+  - uses: bufbuild/buf-setup-action@v0.3.1
   - run: buf --version
 ```
 
