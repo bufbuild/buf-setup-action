@@ -4,7 +4,7 @@ Install and setup [buf](https://github.com/bufbuild/buf) for use in other action
 
 ## Usage
 
-Refer to the [action.yml](https://github.com/bufbuild/buf-setup-action/blob/master/action.yml)
+Refer to the [action.yml](https://github.com/bufbuild/buf-setup-action/blob/main/action.yml)
 to see all of the action parameters.
 
 If `version` is unspecified, it will be defaulted to `latest`.
