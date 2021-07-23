@@ -7,7 +7,6 @@ branding:
 inputs:
   version:
     description: 'The version of buf to setup.'
-    required: true
     default: 'latest'
 runs:
   using: 'node12'
