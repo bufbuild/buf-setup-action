@@ -41,7 +41,13 @@ export async function getBuf(version: string): Promise<string|Error> {
   core.info(`Successfully downloaded buf version "${version}" from ${downloadURL}`);
 
   core.info('Extracting buf...');
-  const extractPath = await tc.extractTar(downloadPath);
+  let extractPath = '';
+  // For Windows, we only download the .exe for `buf` CLI
+  if (path.extname(downloadPath) === '.tar.gz') {
+    extractPath = await tc.extractTar(downloadPath);
+  } else {
+    extractPath = downloadPath
+  }
   core.info(`Successfully extracted buf to ${extractPath}`);
 
   core.info('Adding buf to the cache...');
@@ -66,6 +72,9 @@ async function getDownloadURL(version: string): Promise<string|Error> {
     case 'x64':
       architecture = 'x86_64';
       break;
+    case 'arm64':
+      architecture = 'arm64';
+      break;
     default:
       return {
         message: `The "${os.arch()}" architecture is not supported with a Buf release.`
@@ -78,6 +87,12 @@ async function getDownloadURL(version: string): Promise<string|Error> {
     case 'linux':
       platform = 'Linux';
       break;
+    case 'darwin':
+      platform = 'Darwin';
+      break;
+    case 'win32':
+      platform = 'Windows';
+      break;
     default:
       return {
         message: `The "${os.platform()}" platform is not supported with a Buf release.`
@@ -85,7 +100,13 @@ async function getDownloadURL(version: string): Promise<string|Error> {
   }
   // The asset name is determined by the buf release structure found at:
   // https://github.com/bufbuild/buf/blob/8255257bd94c9f1b5faa27242211c5caad05be79/make/buf/scripts/release.bash#L102
-  const assetName = `buf-${platform}-${architecture}.tar.gz`
+  let assetName = '';
+  // For Windows, we only download the .exe for `buf` CLI
+  if (platform === 'Windows') {
+    assetName = `buf-${platform}-${architecture}.exe`
+  } else {
+    assetName = `buf-${platform}-${architecture}.tar.gz`
+  }
   const octokit = new Octokit();
   const {data: releases} = await octokit.request(
     'GET /repos/{owner}/{repo}/releases',
