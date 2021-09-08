@@ -60,7 +60,7 @@ export async function getBuf(version: string): Promise<string|Error> {
     core.info(`Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`);
 
     core.info('Adding buf to the cache...');
-    cacheDir = await tc.cacheDir(downloadPath, 'buf', version, os.arch());
+    cacheDir = await tc.cacheDir(path.dirname(downloadPath), 'buf', version, os.arch());
   }
   core.info(`Successfully cached buf to ${cacheDir}`);
   return cacheDir;
