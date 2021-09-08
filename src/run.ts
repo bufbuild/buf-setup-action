@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import cp from 'child_process';
+import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
 import * as io from '@actions/io';
@@ -55,7 +56,12 @@ async function runSetup(): Promise<null|Error> {
 
     core.info('Adding buf binary to PATH');
     core.addPath(path.join(installDir, 'bin'));
-    const binaryPath = await io.which('buf', true);
+    let binaryPath = '';
+    if (os.platform() === 'win32') {
+      binaryPath = await io.which('buf.exe', true);
+    } else {
+      binaryPath = await io.which('buf', true);
+    }
     if (binaryPath === '') {
         return {
             message: 'buf was not found on PATH'
