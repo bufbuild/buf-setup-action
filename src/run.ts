@@ -58,11 +58,10 @@ async function runSetup(): Promise<null|Error> {
     let binaryPath = '';
     if (os.platform() === 'win32') {
       core.addPath(installDir);
-      binaryPath = await io.which('buf.exe', true);
     } else {
       core.addPath(path.join(installDir, 'bin'));
-      binaryPath = await io.which('buf', true);
     }
+    binaryPath = await io.which('buf', true);
     if (binaryPath === '') {
         return {
             message: 'buf was not found on PATH'
