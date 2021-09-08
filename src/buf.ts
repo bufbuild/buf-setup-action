@@ -81,6 +81,9 @@ async function getDownloadURL(version: string): Promise<string|Error> {
       };
   }
   let platform = '';
+  console.log("########################");
+  console.log(os.platform());
+  console.log("########################");
   switch (os.platform()) {
     // The available platforms can be found at:
     // https://nodejs.org/api/process.html#process_process_platform
