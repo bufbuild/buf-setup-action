@@ -56,11 +56,11 @@ export async function getBuf(version: string): Promise<string|Error> {
   } else {
     // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
     // bundles for Windows releases.
-    const downloadPath = await tc.downloadTool(downloadURL, 'buf.exe');
+    const downloadPath = await tc.downloadTool(downloadURL, 'C:\\Users\\runnderadmin\\buf.exe');
     core.info(`Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`);
 
     core.info('Adding buf to the cache...');
-    cacheDir = await tc.cacheDir('.', 'buf.exe', version, os.arch());
+    cacheDir = await tc.cacheDir(path.dirname(downloadPath), 'buf.exe', version, os.arch());
   }
   core.info(`Successfully cached buf to ${cacheDir}`);
   return cacheDir;
