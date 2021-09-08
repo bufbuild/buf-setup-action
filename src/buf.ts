@@ -48,17 +48,7 @@ export async function getBuf(version: string): Promise<string|Error> {
   if (downloadURL.endsWith('.tar.gz')) {
     extractPath = await tc.extractTar(downloadPath);
   } else {
-    fs.rename(
-      downloadPath,
-      'buf.exe',
-      (err: NodeJS.ErrnoException | null) => {
-        if (err) throw err;
-        core.info('Failed to rename buf Windows download');
-     });
-    extractPath = path.dirname(downloadPath);
-    core.info("////////////////////");
-    core.info(extractPath);
-    core.info("////////////////////");
+    extractPath = downloadPath;
   }
   core.info(`Successfully extracted buf to ${extractPath}`);
 
