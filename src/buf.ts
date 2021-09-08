@@ -44,7 +44,7 @@ export async function getBuf(version: string): Promise<string|Error> {
   let extractPath = '';
   // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
   // bundles for Windows releases.
-  if (path.extname(downloadURL) === '.tar.gz') {
+  if (downloadURL.endsWith('.tar.gz')) {
     extractPath = await tc.extractTar(downloadPath);
   } else {
     extractPath = path.dirname(downloadPath);
