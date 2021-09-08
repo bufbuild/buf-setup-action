@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
@@ -37,24 +36,17 @@ export async function getBuf(version: string): Promise<string|Error> {
       return downloadURL
   }
 
+  let cacheDir = "";
   core.info(`Downloading buf version "${version}" from ${downloadURL}`);
-  const downloadPath = await tc.downloadTool(downloadURL);
-  core.info(`Successfully downloaded buf version "${version}" from ${downloadURL}`);
+  if (downloadURL.endsWith('.tar.gz')){
+    const downloadPath = await tc.downloadTool(downloadURL);
+    core.info(`Successfully downloaded buf version "${version}" from ${downloadURL}`);
 
-  core.info('Extracting buf...');
-  let extractPath = '';
-  // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
-  // bundles for Windows releases.
-  if (downloadURL.endsWith('.tar.gz')) {
-    extractPath = await tc.extractTar(downloadPath);
-  } else {
-    extractPath = downloadPath;
-  }
-  core.info(`Successfully extracted buf to ${extractPath}`);
+    core.info('Extracting buf...');
+    const extractPath = await tc.extractTar(downloadPath);
+    core.info(`Successfully extracted buf to ${extractPath}`);
 
-  core.info('Adding buf to the cache...');
-  let cacheDir = '';
-  if (downloadURL.endsWith('.tar.gz')) {
+    core.info('Adding buf to the cache...');
     cacheDir = await tc.cacheDir(
       path.join(extractPath, 'buf'),
       'buf',
@@ -62,13 +54,15 @@ export async function getBuf(version: string): Promise<string|Error> {
       os.arch()
     );
   } else {
-    cacheDir = await tc.cacheDir(extractPath, 'buf', version, os.arch());
-    core.info("####################");
-    core.info(cacheDir);
-    core.info("####################");
+    // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
+    // bundles for Windows releases.
+    const downloadPath = await tc.downloadTool(downloadURL, '.');
+    core.info(`Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`);
+
+    core.info('Adding buf to the cache...');
+    cacheDir = await tc.cacheDir(downloadPath, 'buf', version, os.arch());
   }
   core.info(`Successfully cached buf to ${cacheDir}`);
-
   return cacheDir;
 }
 
