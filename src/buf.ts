@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
@@ -47,6 +48,13 @@ export async function getBuf(version: string): Promise<string|Error> {
   if (downloadURL.endsWith('.tar.gz')) {
     extractPath = await tc.extractTar(downloadPath);
   } else {
+    fs.rename(
+      downloadPath,
+      path.join(path.dirname(downloadPath), 'buf.exe'),
+      (err: NodeJS.ErrnoException | null) => {
+        if (err) throw err;
+        core.info('Failed to rename buf Windows download');
+     });
     extractPath = path.dirname(downloadPath);
   }
   core.info(`Successfully extracted buf to ${extractPath}`);
