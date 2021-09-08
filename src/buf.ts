@@ -48,6 +48,9 @@ export async function getBuf(version: string): Promise<string|Error> {
   if (downloadURL.endsWith('.tar.gz')) {
     extractPath = await tc.extractTar(downloadPath);
   } else {
+    core.info("$$$$$$$$$$$$$$$");
+    core.info(downloadPath);
+    core.info("$$$$$$$$$$$$$$$");
     fs.rename(
       downloadPath,
       path.join(path.dirname(downloadPath), 'buf.exe'),
@@ -56,6 +59,9 @@ export async function getBuf(version: string): Promise<string|Error> {
         core.info('Failed to rename buf Windows download');
      });
     extractPath = path.dirname(downloadPath);
+    core.info("////////////////////");
+    core.info(extractPath);
+    core.info("////////////////////");
   }
   core.info(`Successfully extracted buf to ${extractPath}`);
 
@@ -70,6 +76,9 @@ export async function getBuf(version: string): Promise<string|Error> {
     );
   } else {
     cacheDir = await tc.cacheDir(extractPath, 'buf', version, os.arch());
+    core.info("####################");
+    core.info(cacheDir);
+    core.info("####################");
   }
   core.info(`Successfully cached buf to ${cacheDir}`);
 
