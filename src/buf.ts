@@ -52,12 +52,17 @@ export async function getBuf(version: string): Promise<string|Error> {
   core.info(`Successfully extracted buf to ${extractPath}`);
 
   core.info('Adding buf to the cache...');
-  const cacheDir = await tc.cacheDir(
-    path.join(extractPath, 'buf'),
-    'buf',
-    version,
-    os.arch()
-  );
+  let cacheDir = '';
+  if (downloadURL.endsWith('.tar.gz')) {
+    cacheDir = await tc.cacheDir(
+      path.join(extractPath, 'buf'),
+      'buf',
+      version,
+      os.arch()
+    );
+  } else {
+    cacheDir = await tc.cacheDir(extractPath, 'buf', version, os.arch());
+  }
   core.info(`Successfully cached buf to ${cacheDir}`);
 
   return cacheDir;
