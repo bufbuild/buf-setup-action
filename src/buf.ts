@@ -42,7 +42,8 @@ export async function getBuf(version: string): Promise<string|Error> {
 
   core.info('Extracting buf...');
   let extractPath = '';
-  // For Windows, we only download the .exe for `buf` CLI
+  // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
+  // bundles for Windows releases.
   if (path.extname(downloadPath) === '.tar.gz') {
     extractPath = await tc.extractTar(downloadPath);
   } else {
@@ -81,9 +82,6 @@ async function getDownloadURL(version: string): Promise<string|Error> {
       };
   }
   let platform = '';
-  core.info("########################");
-  core.info(os.platform());
-  core.info("########################");
   switch (os.platform()) {
     // The available platforms can be found at:
     // https://nodejs.org/api/process.html#process_process_platform
