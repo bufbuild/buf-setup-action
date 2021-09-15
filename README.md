@@ -7,7 +7,7 @@ Install and setup [buf](https://github.com/bufbuild/buf) for use in other action
 Refer to the [action.yml](https://github.com/bufbuild/buf-setup-action/blob/main/action.yml)
 to see all of the action parameters.
 
-If `version` is unspecified, the default value is set to the latest `buf` version.
+If `version` is unspecified, the default value is set to the latest `buf` version:
 
 ```yaml
 steps:
@@ -24,6 +24,17 @@ steps:
   - uses: bufbuild/buf-setup-action@v0.4.0
     with:
       version: '0.56.0'
+  - run: buf --version
+```
+
+If you want to explicitly set `buf` to its latest release, vou can set it like so:
+
+```yaml
+steps:
+  - uses: actions/checkout@v2
+  - uses: bufbuild/buf-setup-action@v0.4.0
+    with:
+      version: 'latest'
   - run: buf --version
 ```
 
