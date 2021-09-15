@@ -12,7 +12,7 @@ If `version` is unspecified, the default value is set to the latest `buf` versio
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.4.0
+  - uses: bufbuild/buf-setup-action@v0.5.0
   - run: buf --version
 ```
 
@@ -21,18 +21,19 @@ If you want to pin to a specific version, vou can explicitly set it like so:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.4.0
+  - uses: bufbuild/buf-setup-action@v0.5.0
     with:
-      version: '0.56.0'
+      version: '1.0.0-rc1'
   - run: buf --version
 ```
 
-If you want to explicitly set `buf` to its latest release, vou can set it like so:
+If you'd like to resolve the latest release from GitHub, you can specify `latest`,
+but this is **not** recommended:
 
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.4.0
+  - uses: bufbuild/buf-setup-action@v0.5.0
     with:
       version: 'latest'
   - run: buf --version
