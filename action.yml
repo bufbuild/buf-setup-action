@@ -7,7 +7,7 @@ branding:
 inputs:
   version:
     description: 'The version of buf to setup.'
-    default: 'latest'
+    default: '0.56.0'
 runs:
   using: 'node12'
   main: './dist/main.js'
