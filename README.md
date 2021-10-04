@@ -60,7 +60,7 @@ use, such as [setup-protoc][6]. For clarity, you can configure it alongside `buf
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.4.0
+  - uses: bufbuild/buf-setup-action@v0.5.0
   - uses: arduino/setup-protoc@v1
 ```
 
