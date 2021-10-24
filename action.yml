@@ -8,6 +8,8 @@ inputs:
   version:
     description: 'The version of buf to setup.'
     default: '1.0.0-rc6'
+  github_token:
+    description: 'GitHub token to use when making API requests'
 runs:
   using: 'node12'
   main: './dist/main.js'
