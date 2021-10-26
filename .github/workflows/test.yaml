@@ -1,0 +1,13 @@
+name: test
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: . # Run the local version of the action.
+        with:
+          version: 'latest'
+      - run: buf --version
