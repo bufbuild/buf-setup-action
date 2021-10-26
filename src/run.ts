@@ -49,8 +49,14 @@ async function runSetup(): Promise<null|Error> {
         };
     }
 
+    const githubToken = core.getInput('github_token');
+    if (githubToken === '') {
+        core.warning('No github_token supplied, API requests will be subject to stricter rate limiting');
+    }
+
+
     core.info(`Setting up buf version "${version}"`);
-    const installDir = await getBuf(version);
+    const installDir = await getBuf(version, githubToken);
     if (isError(installDir)) {
         return installDir
     }

@@ -39,6 +39,18 @@ steps:
   - run: buf --version
 ```
 
+Optionally, you can supply a `github_token` input so that any GitHub API
+requests are authenticated, avoiding any potential rate limit issues when
+running on GitHub hosted runners:
+
+```yaml
+steps:
+  - uses: bufbuild/buf-setup-action@v0.5.0
+    with:
+      github_token: ${{ github.token }}
+      version: 'latest'
+```
+
 The `buf-setup` action is commonly used by the other `buf` actions,
 such as [buf-breaking][1], [buf-lint][2], and [buf-push][3].
 
