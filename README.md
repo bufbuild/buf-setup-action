@@ -12,7 +12,7 @@ If `version` is unspecified, the default value is set to the latest `buf` versio
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v0.6.0
   - run: buf --version
 ```
 
@@ -21,7 +21,7 @@ If you want to pin to a specific version, vou can explicitly set it like so:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v0.6.0
     with:
       version: '1.0.0-rc1'
   - run: buf --version
@@ -33,7 +33,7 @@ but this is **not** recommended:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v0.6.0
     with:
       version: 'latest'
   - run: buf --version
@@ -45,7 +45,7 @@ running on GitHub hosted runners:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v0.6.0
     with:
       github_token: ${{ github.token }}
       version: 'latest'
@@ -72,7 +72,7 @@ use, such as [setup-protoc][6]. For clarity, you can configure it alongside `buf
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v0.6.0
   - uses: arduino/setup-protoc@v1
 ```
 
