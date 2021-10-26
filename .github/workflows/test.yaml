@@ -8,4 +8,5 @@ jobs:
       - uses: ./ # Run the local version of the action.
         with:
           version: 'latest'
+          github_token: ${{ github.token }}
       - run: buf --version
