@@ -23,7 +23,7 @@ import { Error, isError } from './error';
 // optionally be specified in the action's version parameter.
 const versionPrefix = "v";
 
-export async function getBuf(version: string, token: string): Promise<string|Error> {
+export async function getBuf(version: string, githubToken: string): Promise<string|Error> {
   const binaryPath = tc.find('buf', version, os.arch());
   if (binaryPath !== '') {
     core.info(`Found in cache @ ${binaryPath}`);
@@ -31,7 +31,7 @@ export async function getBuf(version: string, token: string): Promise<string|Err
   }
 
   core.info(`Resolving the download URL for the current platform...`);
-  const downloadURL = await getDownloadURL(version);
+  const downloadURL = await getDownloadURL(version, githubToken);
   if (isError(downloadURL)) {
       return downloadURL
   }
@@ -68,7 +68,7 @@ export async function getBuf(version: string, token: string): Promise<string|Err
 
 // getDownloadURL resolves Buf's Github download URL for the
 // current architecture and platform.
-async function getDownloadURL(version: string, token: string): Promise<string|Error> {
+async function getDownloadURL(version: string, githubToken: string): Promise<string|Error> {
   let architecture = '';
   switch (os.arch()) {
     // The available architectures can be found at:
@@ -111,7 +111,7 @@ async function getDownloadURL(version: string, token: string): Promise<string|Er
   } else {
     assetName = `buf-${platform}-${architecture}.tar.gz`
   }
-  const octokit = new Octokit({ auth: token });
+  const octokit = new Octokit({ auth: githubToken });
   const {data: releases} = await octokit.request(
     'GET /repos/{owner}/{repo}/releases',
     {
