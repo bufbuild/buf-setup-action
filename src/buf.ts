@@ -112,46 +112,46 @@ async function getDownloadURL(version: string, githubToken: string): Promise<str
     assetName = `buf-${platform}-${architecture}.tar.gz`
   }
   const octokit = new Octokit({ auth: githubToken });
-  const {data: releases} = await octokit.request(
-    'GET /repos/{owner}/{repo}/releases',
+  if (version === 'latest') {
+    const {data: releases} = await octokit.request(
+      'GET /repos/{owner}/{repo}/releases',
+      {
+        owner: 'bufbuild',
+        repo: 'buf',
+        per_page: 1,
+      }
+    );
+    for (const asset of releases[0].assets) {
+      if (assetName === asset.name) {
+        return asset.browser_download_url;
+      }
+    }
+  }
+  const tag = releaseTagForVersion(version);
+  const {data: release} = await octokit.request(
+    'GET /repos/{owner}/{repo}/releases/tags/{tag}',
     {
       owner: 'bufbuild',
       repo: 'buf',
+      tag: tag,
     }
   );
-  switch (version) {
-    case 'latest':
-      for (const asset of releases[0].assets) {
-        if (assetName === asset.name) {
-          return asset.browser_download_url;
-        }
-      }
-      break;
-    default:
-      for (const release of releases) {
-        if (releaseTagIsVersion(release.tag_name, version)) {
-          for (const asset of release.assets) {
-            if (assetName === asset.name) {
-              return asset.browser_download_url;
-            }
-          }
-        }
-      }
+  for (const asset of release.assets) {
+    if (assetName === asset.name) {
+      return asset.browser_download_url;
+    }
   }
   return {
     message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
   };
 }
 
-// releaseTagIsVersion returns true if the given Github release tag is equivalent
-// to the user-specified version. Github releases include the 'v' prefix, but the
-// `buf --version` does not. Thus, we permit both versions, e.g. v0.38.0 and 0.38.0.
-function releaseTagIsVersion(releaseTag: string, version: string): boolean {
-  if (releaseTag.indexOf(versionPrefix) === 0) {
-    releaseTag = releaseTag.slice(versionPrefix.length)
-  }
+// releaseTagForVersion returns the release tag name based on a given version configuration.
+// Github releases include the 'v' prefix, but the `buf --version` does not. Thus, we permit
+// both versions, e.g. v0.38.0 and 0.38.0.
+function releaseTagForVersion(version: string): string {
   if (version.indexOf(versionPrefix) === 0) {
-    version = version.slice(versionPrefix.length)
+    return version
   }
-  return releaseTag === version
+  return versionPrefix + version
 }
