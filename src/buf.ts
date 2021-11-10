@@ -126,6 +126,9 @@ async function getDownloadURL(version: string, githubToken: string): Promise<str
         return asset.browser_download_url;
       }
     }
+    return {
+      message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
+    };
   }
   const tag = releaseTagForVersion(version);
   const {data: release} = await octokit.request(
