@@ -51,8 +51,19 @@ steps:
       version: 'latest'
 ```
 
-The `buf-setup` action is commonly used by the other `buf` actions,
-such as [buf-breaking][1], [buf-lint][2], and [buf-push][3].
+After `buf-setup`, the `buf` command will be in `$PATH` and you are ready to use one 
+of the other Buf actions such as [buf-breaking][1], [buf-lint][2], and [buf-push][3]. 
+You can also use the `buf` command directly from a workflow step. 
+
+When calling the `buf` command directly from a workflow step, you may need to authenticate with 
+Buf Schema Registry. You can authenticate by setting the `BUF_TOKEN` environment variable. 
+For example, if you have a GitHub secret called `BUF_TOKEN` you can set the `BUF_TOKEN` 
+environment variable with this yaml:
+
+```yaml
+env:
+  BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
+```
 
   [1]: https://github.com/marketplace/actions/buf-breaking
   [2]: https://github.com/marketplace/actions/buf-lint
