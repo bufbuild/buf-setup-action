@@ -8,7 +8,7 @@ used by other Buf Actions:
 * [`buf-push-action`][buf-push]
 
 After `buf-setup-action` is run, the `buf` command is available to other Actions in the pipeline's
-`PATH`. You can also the `buf` command directly inside of workflow steps.
+`PATH`. You can also use the `buf` command directly inside of workflow steps.
 
 ## Usage
 
