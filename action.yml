@@ -6,10 +6,10 @@ branding:
   color: blue
 inputs:
   version:
-    description: 'The version of buf to setup.'
+    description: The version of buf to set up.
     default: '1.0.0-rc12'
   github_token:
-    description: 'GitHub token to use when making API requests'
+    description: The GitHub token to use when making API requests.
 runs:
   using: 'node12'
   main: './dist/main.js'
