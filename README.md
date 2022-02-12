@@ -1,92 +1,142 @@
-# buf-setup-action
+# `buf-setup-action`
 
-Install and setup [buf](https://github.com/bufbuild/buf) for use in other actions.
+This [Action] installs the [`buf`][buf-cli] CLI in your GitHub Actions pipelines so that it can be
+used by other Buf Actions:
+
+* [`buf-breaking-action`][buf-breaking]
+* [`buf-lint-action`][buf-lint]
+* [`buf-push-action`][buf-push]
+
+After `buf-setup-action` is run, the `buf` command is available to other Actions in the pipeline's
+`PATH`. You can also use the `buf` command directly inside of workflow steps.
 
 ## Usage
 
-Refer to the [action.yml](https://github.com/bufbuild/buf-setup-action/blob/main/action.yml)
-to see all of the action parameters.
+Here's an example usage of `buf-setup-action`:
 
-If `version` is unspecified, the default value is set to the latest `buf` version:
+```yaml
+steps:
+  # Run `git checkout`
+  - users: actions/checkout@v2
+  # Install the `buf` CLI
+  - users: bufbuild/buf-setup-action@v0.5.0
+  # Ensure that `buf` is installed
+  - run: buf --version
+```
+
+## Configuration
+
+You can configure `buf-setup-action` with these parameters:
+
+Parameter | Description | Default
+:---------|:------------|:-------
+`version` | The version of the [`buf` CLI][buf-cli] to install | [`1.0.0-rc12`][version]
+`github_token` | The GitHub token to use when making API requests |
+
+> These parameters are derived from [`action.yml`](./action.yml).
+
+### Version
+
+If `version` is unspecified, the latest version of `buf` is installed:
 
 ```yaml
 steps:
   - uses: actions/checkout@v2
+  # Installs latest
   - uses: bufbuild/buf-setup-action@v0.6.0
   - run: buf --version
 ```
 
-If you want to pin to a specific version, vou can explicitly set it like so:
+Use the `version` parameter to pin to a specific version:
+
+```yaml
+steps:
+  - uses: actions/checkout@v2
+  # Installs version 1.0.0-rc10
+  - uses: bufbuild/buf-setup-action@v0.6.0
+    with:
+      version: 1.0.0-rc10
+  # Should output 1.0.0-rc10
+  - run: buf --version
+```
+
+To resolve the latest release from GitHub, you can specify `latest`, but this is **not**
+recommended:
 
 ```yaml
 steps:
   - uses: actions/checkout@v2
   - uses: bufbuild/buf-setup-action@v0.6.0
     with:
-      version: '1.0.0-rc1'
+      version: latest
   - run: buf --version
 ```
 
-If you'd like to resolve the latest release from GitHub, you can specify `latest`,
-but this is **not** recommended:
+### GitHub token
 
-```yaml
-steps:
-  - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.6.0
-    with:
-      version: 'latest'
-  - run: buf --version
-```
-
-Optionally, you can supply a `github_token` input so that any GitHub API
-requests are authenticated, avoiding any potential rate limit issues when
-running on GitHub hosted runners:
+Optionally, you can supply a `github_token` input so that any GitHub API requests are authenticated.
+This may prevent rate limit issues when running on GitHub hosted runners:
 
 ```yaml
 steps:
   - uses: bufbuild/buf-setup-action@v0.6.0
     with:
       github_token: ${{ github.token }}
-      version: 'latest'
 ```
 
-After `buf-setup`, the `buf` command will be in `$PATH` and you are ready to use one 
-of the other Buf actions such as [buf-breaking][1], [buf-lint][2], and [buf-push][3]. 
-You can also use the `buf` command directly from a workflow step. 
+### Buf token
 
-When calling the `buf` command directly from a workflow step, you may need to authenticate with 
-Buf Schema Registry. You can authenticate by setting the `BUF_TOKEN` environment variable. 
-For example, if you have a GitHub secret called `BUF_TOKEN` you can set the `BUF_TOKEN` 
-environment variable with this yaml:
+When calling the `buf` command directly from a workflow step, you may need to authenticate with the
+[Buf Schema Registry][bsr] (BSR). You can authenticate by setting the [`BUF_TOKEN`][buf-token]
+environment variable. If you have a GitHub secret called `BUF_TOKEN`, for example, you can set the
+`BUF_TOKEN`  environment variable like this:
 
 ```yaml
 env:
   BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
 ```
 
-  [1]: https://github.com/marketplace/actions/buf-breaking
-  [2]: https://github.com/marketplace/actions/buf-lint
-  [3]: https://github.com/marketplace/actions/buf-push
+### Installing `protoc`
 
-## Installing `protoc`
+In most cases, you _don't_ need to install [`protoc`][protoc] for Buf's GitHub Actions, but some
+`protoc` plugins are built into the compiler itself. If you need to execute one of these plugins,
+you do need to install `protoc` alongside `buf`:
 
-In most cases, you _don't_ need to install [`protoc`][4] for Buf's GitHub Actions, but
-some `protoc` plugins are built-in to the compiler itself. If you need to execute any of
-`protoc-gen-{cpp,csharp,java,js,objc,php,python,ruby,kotlin}`, then you'll need to install
-`protoc` alongside `buf`. In these cases, `buf` actually executes `protoc` as a plugin,
-but continues to use its own [internal compiler][5].
+* `protoc-gen-cpp` (C++)
+* `protoc-gen-csharp` (C#)
+* `protoc-gen-java` (Java)
+* `protoc-gen-js` (JavaScript)
+* `protoc-gen-objc` (Objective-C)
+* `protoc-gen-php` (PHP)
+* `protoc-gen-python` (Python)
+* `protoc-gen-ruby` (Ruby)
+* `protoc-gen-kotlin` (Kotlin)
 
-The `buf-setup-action` won't install `protoc` for you, but there are other options you can
-use, such as [setup-protoc][6]. For clarity, you can configure it alongside `buf` like so:
+In these cases, `buf` executes `protoc` as a plugin but continues to use its own [internal
+compiler][compiler].
+
+The `buf-setup-action` doesn't install `protoc` for you, but there are other options you can
+use, such as [`setup-protoc`][setup-protoc]. To configure it alongside `buf`:
 
 ```yaml
 steps:
+  # Run `git checkout`
   - uses: actions/checkout@v2
+  # Install the `buf` CLI
   - uses: bufbuild/buf-setup-action@v0.6.0
+  # Install `protoc`
   - uses: arduino/setup-protoc@v1
 ```
 
-  [4]: https://github.com/protocolbuffers/protobuf#protocol-compiler-installation
-  [5]: https://docs.buf.build/build/internal-compiler
-  [6]: https://github.com/marketplace/actions/setup-protoc
+[action]: https://docs.github.com/actions
+[breaking]: https://docs.buf.build/breaking
+[bsr]: https://docs.buf.build/bsr
+[buf-breaking]: https://github.com/marketplace/actions/buf-breaking
+[buf-cli]: https://github.com/bufbuild/buf
+[buf-lint]: https://github.com/marketplace/actions/buf-lint
+[buf-push]: https://github.com/marketplace/actions/buf-push
+[buf-token]: https://docs.buf.build/bsr/authentication#buf_token
+[compiler]: https://docs.buf.build/build/internal-compiler
+[protoc]: https://github.com/protocolbuffers/protobuf#protocol-compiler-installation
+[setup-protoc]: https://github.com/marketplace/actions/setup-protoc
+[version]: https://github.com/bufbuild/buf/releases/tag/v1.0.0-rc12
