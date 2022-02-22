@@ -17,9 +17,9 @@ Here's an example usage of `buf-setup-action`:
 ```yaml
 steps:
   # Run `git checkout`
-  - users: actions/checkout@v2
+  - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - users: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v0.5.0
   # Ensure that `buf` is installed
   - run: buf --version
 ```
