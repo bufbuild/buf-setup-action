@@ -7,7 +7,7 @@ branding:
 inputs:
   version:
     description: The version of buf to set up.
-    default: '1.0.0'
+    default: '1.1.0'
   github_token:
     description: The GitHub token to use when making API requests.
 runs:

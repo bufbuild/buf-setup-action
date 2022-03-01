@@ -30,7 +30,7 @@ You can configure `buf-setup-action` with these parameters:
 
 Parameter | Description | Default
 :---------|:------------|:-------
-`version` | The version of the [`buf` CLI][buf-cli] to install | [`1.0.0`][version]
+`version` | The version of the [`buf` CLI][buf-cli] to install | [`1.1.0`][version]
 `github_token` | The GitHub token to use when making API requests |
 
 > These parameters are derived from [`action.yml`](./action.yml).
@@ -52,11 +52,11 @@ Use the `version` parameter to pin to a specific version:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  # Installs version 1.0.0
-  - uses: bufbuild/buf-setup-action@v0.6.0
+  # Installs version 1.1.0
+  - uses: bufbuild/buf-setup-action@v1.1.0
     with:
-      version: 1.0.0
-  # Should output 1.0.0
+      version: 1.1.0
+  # Should output 1.1.0
   - run: buf --version
 ```
 
@@ -139,4 +139,4 @@ steps:
 [compiler]: https://docs.buf.build/build/internal-compiler
 [protoc]: https://github.com/protocolbuffers/protobuf#protocol-compiler-installation
 [setup-protoc]: https://github.com/marketplace/actions/setup-protoc
-[version]: https://github.com/bufbuild/buf/releases/tag/v1.0.0
+[version]: https://github.com/bufbuild/buf/releases/tag/v1.1.0
