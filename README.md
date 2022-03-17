@@ -19,7 +19,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@v0.5.0
+  - uses: bufbuild/buf-setup-action@v1.1.0
   # Ensure that `buf` is installed
   - run: buf --version
 ```
@@ -43,7 +43,7 @@ If `version` is unspecified, the latest version of `buf` is installed:
 steps:
   - uses: actions/checkout@v2
   # Installs latest
-  - uses: bufbuild/buf-setup-action@v0.6.0
+  - uses: bufbuild/buf-setup-action@v1.1.0
   - run: buf --version
 ```
 
@@ -66,7 +66,7 @@ recommended:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v0.6.0
+  - uses: bufbuild/buf-setup-action@v1.1.0
     with:
       version: latest
   - run: buf --version
@@ -79,7 +79,7 @@ This may prevent rate limit issues when running on GitHub hosted runners:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v0.6.0
+  - uses: bufbuild/buf-setup-action@v1.1.0
     with:
       github_token: ${{ github.token }}
 ```
@@ -123,7 +123,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@v0.6.0
+  - uses: bufbuild/buf-setup-action@v1.1.0
   # Install `protoc`
   - uses: arduino/setup-protoc@v1
 ```
