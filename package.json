@@ -6,7 +6,7 @@
 		"@actions/github": "^4.0.0",
 		"@actions/io": "^1.0.2",
 		"@actions/tool-cache": "^1.6.1",
-		"@types/node": "^14.14.35",
+		"@types/node": "^17.0.23",
 		"child_process": "^1.0.2"
 	},
 	"devDependencies": {
