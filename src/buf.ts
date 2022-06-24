@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Buf Technologies, Inc.
+// Copyright 2020-2022 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as os from 'os';
-import * as path from 'path';
-import * as core from '@actions/core';
-import * as tc from '@actions/tool-cache';
-import {Octokit} from '@octokit/core';
-import { Error, isError } from './error';
+import * as os from "os";
+import * as path from "path";
+import * as core from "@actions/core";
+import * as tc from "@actions/tool-cache";
+import { Octokit } from "@octokit/core";
+import { Error, isError } from "./error";
 
 // versionPrefix is used in Github release names, and can
 // optionally be specified in the action's version parameter.
 const versionPrefix = "v";
 
-export async function getBuf(version: string, githubToken: string): Promise<string|Error> {
-  const binaryPath = tc.find('buf', version, os.arch());
-  if (binaryPath !== '') {
+export async function getBuf(
+  version: string,
+  githubToken: string
+): Promise<string | Error> {
+  const binaryPath = tc.find("buf", version, os.arch());
+  if (binaryPath !== "") {
     core.info(`Found in cache @ ${binaryPath}`);
     return binaryPath;
   }
@@ -33,34 +36,46 @@ export async function getBuf(version: string, githubToken: string): Promise<stri
   core.info(`Resolving the download URL for the current platform...`);
   const downloadURL = await getDownloadURL(version, githubToken);
   if (isError(downloadURL)) {
-      return downloadURL
+    return downloadURL;
   }
 
   let cacheDir = "";
   core.info(`Downloading buf version "${version}" from ${downloadURL}`);
-  if (downloadURL.endsWith('.tar.gz')){
+  if (downloadURL.endsWith(".tar.gz")) {
     const downloadPath = await tc.downloadTool(downloadURL);
-    core.info(`Successfully downloaded buf version "${version}" from ${downloadURL}`);
+    core.info(
+      `Successfully downloaded buf version "${version}" from ${downloadURL}`
+    );
 
-    core.info('Extracting buf...');
+    core.info("Extracting buf...");
     const extractPath = await tc.extractTar(downloadPath);
     core.info(`Successfully extracted buf to ${extractPath}`);
 
-    core.info('Adding buf to the cache...');
+    core.info("Adding buf to the cache...");
     cacheDir = await tc.cacheDir(
-      path.join(extractPath, 'buf'),
-      'buf',
+      path.join(extractPath, "buf"),
+      "buf",
       version,
       os.arch()
     );
   } else {
     // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
     // bundles for Windows releases.
-    const downloadPath = await tc.downloadTool(downloadURL, 'C:\\Users\\runneradmin\\buf-download\\buf.exe');
-    core.info(`Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`);
+    const downloadPath = await tc.downloadTool(
+      downloadURL,
+      "C:\\Users\\runneradmin\\buf-download\\buf.exe"
+    );
+    core.info(
+      `Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`
+    );
 
-    core.info('Adding buf to the cache...');
-    cacheDir = await tc.cacheDir(path.dirname(downloadPath), 'buf', version, os.arch());
+    core.info("Adding buf to the cache...");
+    cacheDir = await tc.cacheDir(
+      path.dirname(downloadPath),
+      "buf",
+      version,
+      os.arch()
+    );
   }
   core.info(`Successfully cached buf to ${cacheDir}`);
   return cacheDir;
@@ -68,56 +83,59 @@ export async function getBuf(version: string, githubToken: string): Promise<stri
 
 // getDownloadURL resolves Buf's Github download URL for the
 // current architecture and platform.
-async function getDownloadURL(version: string, githubToken: string): Promise<string|Error> {
-  let architecture = '';
+async function getDownloadURL(
+  version: string,
+  githubToken: string
+): Promise<string | Error> {
+  let architecture = "";
   switch (os.arch()) {
     // The available architectures can be found at:
     // https://nodejs.org/api/process.html#process_process_arch
-    case 'x64':
-      architecture = 'x86_64';
+    case "x64":
+      architecture = "x86_64";
       break;
-    case 'arm64':
-      architecture = 'arm64';
+    case "arm64":
+      architecture = "arm64";
       break;
     default:
       return {
-        message: `The "${os.arch()}" architecture is not supported with a Buf release.`
+        message: `The "${os.arch()}" architecture is not supported with a Buf release.`,
       };
   }
-  let platform = '';
+  let platform = "";
   switch (os.platform()) {
     // The available platforms can be found at:
     // https://nodejs.org/api/process.html#process_process_platform
-    case 'linux':
-      platform = 'Linux';
+    case "linux":
+      platform = "Linux";
       break;
-    case 'darwin':
-      platform = 'Darwin';
+    case "darwin":
+      platform = "Darwin";
       break;
-    case 'win32':
-      platform = 'Windows';
+    case "win32":
+      platform = "Windows";
       break;
     default:
       return {
-        message: `The "${os.platform()}" platform is not supported with a Buf release.`
+        message: `The "${os.platform()}" platform is not supported with a Buf release.`,
       };
   }
   // The asset name is determined by the buf release structure found at:
   // https://github.com/bufbuild/buf/blob/8255257bd94c9f1b5faa27242211c5caad05be79/make/buf/scripts/release.bash#L102
-  let assetName = '';
+  let assetName = "";
   // For Windows, we only download the .exe for `buf` CLI
-  if (platform === 'Windows') {
-    assetName = `buf-${platform}-${architecture}.exe`
+  if (platform === "Windows") {
+    assetName = `buf-${platform}-${architecture}.exe`;
   } else {
-    assetName = `buf-${platform}-${architecture}.tar.gz`
+    assetName = `buf-${platform}-${architecture}.tar.gz`;
   }
   const octokit = new Octokit({ auth: githubToken });
-  if (version === 'latest') {
-    const {data: releases} = await octokit.request(
-      'GET /repos/{owner}/{repo}/releases',
+  if (version === "latest") {
+    const { data: releases } = await octokit.request(
+      "GET /repos/{owner}/{repo}/releases",
       {
-        owner: 'bufbuild',
-        repo: 'buf',
+        owner: "bufbuild",
+        repo: "buf",
         per_page: 1,
       }
     );
@@ -127,15 +145,15 @@ async function getDownloadURL(version: string, githubToken: string): Promise<str
       }
     }
     return {
-      message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
+      message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`,
     };
   }
   const tag = releaseTagForVersion(version);
-  const {data: release} = await octokit.request(
-    'GET /repos/{owner}/{repo}/releases/tags/{tag}',
+  const { data: release } = await octokit.request(
+    "GET /repos/{owner}/{repo}/releases/tags/{tag}",
     {
-      owner: 'bufbuild',
-      repo: 'buf',
+      owner: "bufbuild",
+      repo: "buf",
       tag: tag,
     }
   );
@@ -145,7 +163,7 @@ async function getDownloadURL(version: string, githubToken: string): Promise<str
     }
   }
   return {
-    message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`
+    message: `Unable to find Buf version "${version}" for platform "${platform}" and architecture "${architecture}".`,
   };
 }
 
@@ -154,7 +172,7 @@ async function getDownloadURL(version: string, githubToken: string): Promise<str
 // both versions, e.g. v0.38.0 and 0.38.0.
 function releaseTagForVersion(version: string): string {
   if (version.indexOf(versionPrefix) === 0) {
-    return version
+    return version;
   }
-  return versionPrefix + version
+  return versionPrefix + version;
 }

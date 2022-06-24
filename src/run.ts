@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Buf Technologies, Inc.
+// Copyright 2020-2022 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,71 +12,72 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import cp from 'child_process';
-import * as os from 'os';
-import * as path from 'path';
-import * as core from '@actions/core';
-import * as io from '@actions/io';
-import { getBuf } from './buf';
-import { Error, isError } from './error';
+import cp from "child_process";
+import * as os from "os";
+import * as path from "path";
+import * as core from "@actions/core";
+import * as io from "@actions/io";
+import { getBuf } from "./buf";
+import { Error, isError } from "./error";
 
 export async function run(): Promise<void> {
-    try {
-        const result = await runSetup()
-        if (result !== null && isError(result)) {
-            core.setFailed(result.message);
-        }
-    } catch (error) {
-        // In case we ever fail to catch an error
-        // in the call chain, we catch the error
-        // and mark the build as a failure. The
-        // user is otherwise prone to false positives.
-        if (isError(error)) {
-            core.setFailed(error.message);
-            return;
-        }
-        core.setFailed('Internal error');
+  try {
+    const result = await runSetup();
+    if (result !== null && isError(result)) {
+      core.setFailed(result.message);
     }
+  } catch (error) {
+    // In case we ever fail to catch an error
+    // in the call chain, we catch the error
+    // and mark the build as a failure. The
+    // user is otherwise prone to false positives.
+    if (isError(error)) {
+      core.setFailed(error.message);
+      return;
+    }
+    core.setFailed("Internal error");
+  }
 }
 
 // runSetup runs the buf-setup action, and returns
 // a non-empty error if it fails.
-async function runSetup(): Promise<null|Error> {
-    const version = core.getInput('version');
-    if (version === '') {
-        return {
-            message: 'a version was not provided'
-        };
-    }
+async function runSetup(): Promise<null | Error> {
+  const version = core.getInput("version");
+  if (version === "") {
+    return {
+      message: "a version was not provided",
+    };
+  }
 
-    const githubToken = core.getInput('github_token');
-    if (githubToken === '') {
-        core.warning('No github_token supplied, API requests will be subject to stricter rate limiting');
-    }
+  const githubToken = core.getInput("github_token");
+  if (githubToken === "") {
+    core.warning(
+      "No github_token supplied, API requests will be subject to stricter rate limiting"
+    );
+  }
 
+  core.info(`Setting up buf version "${version}"`);
+  const installDir = await getBuf(version, githubToken);
+  if (isError(installDir)) {
+    return installDir;
+  }
 
-    core.info(`Setting up buf version "${version}"`);
-    const installDir = await getBuf(version, githubToken);
-    if (isError(installDir)) {
-        return installDir
-    }
+  core.info("Adding buf binary to PATH");
+  let binaryPath = "";
+  if (os.platform() === "win32") {
+    core.addPath(installDir);
+  } else {
+    core.addPath(path.join(installDir, "bin"));
+  }
+  binaryPath = await io.which("buf", true);
+  if (binaryPath === "") {
+    return {
+      message: "buf was not found on PATH",
+    };
+  }
 
-    core.info('Adding buf binary to PATH');
-    let binaryPath = '';
-    if (os.platform() === 'win32') {
-      core.addPath(installDir);
-    } else {
-      core.addPath(path.join(installDir, 'bin'));
-    }
-    binaryPath = await io.which('buf', true);
-    if (binaryPath === '') {
-        return {
-            message: 'buf was not found on PATH'
-        };
-    }
+  core.info(`Successfully setup buf version ${version}`);
+  core.info(cp.execSync(`${binaryPath} --version`).toString());
 
-    core.info(`Successfully setup buf version ${version}`);
-    core.info(cp.execSync(`${binaryPath} --version`).toString());
-
-    return null;
+  return null;
 }
