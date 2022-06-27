@@ -1,2 +1,4 @@
-/.tmp/
+.idea/
+.tmp/
+.vscode/
 node_modules/

@@ -1,4 +1,4 @@
-name: 'buf-setup'
+name: "buf-setup"
 description: >
   Install buf for use in other jobs.
 branding:
@@ -7,9 +7,11 @@ branding:
 inputs:
   version:
     description: The version of buf to set up.
-    default: '1.6.0'
+    required: false
+    default: "1.6.0"
   github_token:
     description: The GitHub token to use when making API requests.
+    required: false
 runs:
-  using: 'node12'
-  main: './dist/main.js'
+  using: "node16"
+  main: "./dist/main.js"
