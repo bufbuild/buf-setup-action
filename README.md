@@ -28,10 +28,10 @@ steps:
 
 You can configure `buf-setup-action` with these parameters:
 
-Parameter | Description | Default
-:---------|:------------|:-------
-`version` | The version of the [`buf` CLI][buf-cli] to install | [`1.9.0`][version]
-`github_token` | The GitHub token to use when making API requests |
+| Parameter      | Description                                        | Default            |
+|:---------------|:---------------------------------------------------|:-------------------|
+| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`1.9.0`][version] |
+| `github_token` | The GitHub token to use when making API requests   |                    |
 
 > These parameters are derived from [`action.yml`](./action.yml).
 

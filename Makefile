@@ -40,6 +40,7 @@ ifndef VERSION
 	$(error "VERSION must be set")
 endif
 	$(SED_I) "s/default: '[0-9].[0-9][0-9]*\.[0-9][0-9]*[-rc0-9]*'/default: '$(VERSION)'/g" action.yml
+	$(SED_I) "s/[0-9].[0-9][0-9]*\.[0-9][0-9]*[-rc0-9]*/$(VERSION)/g" README.md
 
 .PHONY: generate
 generate: $(BIN)/license-header ## Regenerate licenses
