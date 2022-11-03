@@ -5,6 +5,7 @@ on:
       version:
         type: string
         description: The version you intend to release (eg x.y.z)
+        required: true
 
 env:
   VERSION: v${{ github.event.inputs.version }}
@@ -13,7 +14,6 @@ env:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version != '' }}
     steps:
       - name: Generate token
         id: generate_token
