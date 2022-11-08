@@ -1,0 +1,75 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: The version you intend to release (eg x.y.z)
+        required: true
+
+env:
+  VERSION: v${{ github.event.inputs.version }}
+  APP_ID: 257262
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{env.APP_ID}}
+          private_key: ${{ secrets.TOKEN_EXCHANGE_GH_APP_PRIVATE_KEY }}
+          repository: ${{ github.repository }}
+          permissions: >-
+            {"contents": "write", "pull_requests": "write"}
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19.x'
+      - name: Update docs Version
+        run: make updateversion VERSION=${{env.VERSION}}
+      - name: Create PR
+        id: cpr
+        uses: peter-evans/create-pull-request@ad43dccb4d726ca8514126628bec209b8354b6dd
+        with:
+          add-paths: .
+          commit-message: "Update version to ${{env.VERSION}}"
+          branch: release/${{env.VERSION}}
+          delete-branch: true
+          title: "Release ${{env.VERSION}}"
+          body: Release prepared for ${{env.VERSION}}
+          token: ${{ steps.generate_token.outputs.token }}
+  tag:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release') }}
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{env.APP_ID}}
+          private_key: ${{ secrets.TOKEN_EXCHANGE_GH_APP_PRIVATE_KEY }}
+          repository: ${{ github.repository }}
+          permissions: >-
+            {"contents": "write"}
+      - name: Set VERSION variable from tag
+        run: |
+          VERSION=${{github.head_ref}}
+          echo "VERSION=${VERSION##*/}" >> $GITHUB_ENV
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
+      - name: Tag Release
+        run: |
+          git config --global user.password ${{ steps.generate_token.outputs.token }}
+          git tag -d ${{env.VERSION}} 2> /dev/null || echo 'local ref does not exist'
+          git push origin :${{env.VERSION}} 2> /dev/null || echo 'remote ref does not exist'
+          git tag ${{env.VERSION}}
+          git push origin ${{env.VERSION}}
