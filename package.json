@@ -17,12 +17,13 @@
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.1.1",
     "@actions/io": "^1.1.2",
-    "@actions/tool-cache": "^2.0.1"
+    "@actions/tool-cache": "^2.0.1",
+    "https-proxy-agent": "^5.0.1"
   },
   "devDependencies": {
+    "@types/node": "^18.7.14",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
-    "@types/node": "^18.7.14",
     "esbuild": "^0.15.10",
     "prettier": "^2.7.1",
     "typescript": "^4.8.4"
