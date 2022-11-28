@@ -18,6 +18,7 @@ import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import { Octokit } from "@octokit/core";
 import { Error, isError } from "./error";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 // versionPrefix is used in Github release names, and can
 // optionally be specified in the action's version parameter.
@@ -129,7 +130,15 @@ async function getDownloadURL(
   } else {
     assetName = `buf-${platform}-${architecture}.tar.gz`;
   }
-  const octokit = new Octokit({ auth: githubToken });
+  const requestAgent = process.env.http_proxy
+    ? new HttpsProxyAgent(process.env.http_proxy)
+    : undefined;
+  const octokit = new Octokit({
+    auth: githubToken,
+    request: {
+      agent: requestAgent,
+    },
+  });
   if (version === "latest") {
     const { data: releases } = await octokit.request(
       "GET /repos/{owner}/{repo}/releases",
