@@ -6,14 +6,22 @@ on:
         type: string
         description: The version you intend to release (eg x.y.z)
         required: true
+  pull_request:
+    types: [ closed ]
+  push:
+    branches:
+      - 'release/**'
+    tags:
+      - v*
 
 env:
-  VERSION: v${{ github.event.inputs.version }}
+  VERSION: ${{ github.event.inputs.version }}
   APP_ID: 257262
 
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version != '' }}
     steps:
       - name: Generate token
         id: generate_token
@@ -35,14 +43,15 @@ jobs:
         run: make updateversion VERSION=${{env.VERSION}}
       - name: Create PR
         id: cpr
-        uses: peter-evans/create-pull-request@ad43dccb4d726ca8514126628bec209b8354b6dd
+        uses: peter-evans/create-pull-request@331d02c7e2104af23ad5974d4d5cbc58a3e6dc77
         with:
           add-paths: .
-          commit-message: "Update version to ${{env.VERSION}}"
-          branch: release/${{env.VERSION}}
+          commit-message: "Update version to v${{env.VERSION}}"
+          branch: release/v${{env.VERSION}}
           delete-branch: true
-          title: "Release ${{env.VERSION}}"
-          body: Release prepared for ${{env.VERSION}}
+          title: "Release v${{env.VERSION}}"
+          body: |
+            Release prepared for ${{env.VERSION}}
           token: ${{ steps.generate_token.outputs.token }}
   tag:
     runs-on: ubuntu-latest
@@ -66,10 +75,39 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
-      - name: Tag Release
+      - name: Tag
         run: |
           git config --global user.password ${{ steps.generate_token.outputs.token }}
           git tag -d ${{env.VERSION}} 2> /dev/null || echo 'local ref does not exist'
           git push origin :${{env.VERSION}} 2> /dev/null || echo 'remote ref does not exist'
           git tag ${{env.VERSION}}
           git push origin ${{env.VERSION}}
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{env.APP_ID}}
+          private_key: ${{ secrets.TOKEN_EXCHANGE_GH_APP_PRIVATE_KEY }}
+          repository: ${{ github.repository }}
+          permissions: >-
+            {"contents": "write"}
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
+      - name: Sync v1 branch
+        run: |
+          git fetch origin
+          git switch v1
+          git merge main
+          git push origin v1
+      - name: Release
+        id: ghr
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
