@@ -52,7 +52,7 @@ Use the `version` parameter to pin to a specific version:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  # Installs version v1.10.0
+  # Installs version 1.10.0
   - uses: bufbuild/buf-setup-action@v1.10.0
     with:
       version: 1.10.0
