@@ -19,7 +19,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@vv1.10.0
+  - uses: bufbuild/buf-setup-action@v1.10.0
   # Ensure that `buf` is installed
   - run: buf --version
 ```
@@ -43,7 +43,7 @@ If `version` is unspecified, the latest version of `buf` is installed:
 steps:
   - uses: actions/checkout@v2
   # Installs latest
-  - uses: bufbuild/buf-setup-action@vv1.10.0
+  - uses: bufbuild/buf-setup-action@v1.10.0
   - run: buf --version
 ```
 
@@ -53,10 +53,10 @@ Use the `version` parameter to pin to a specific version:
 steps:
   - uses: actions/checkout@v2
   # Installs version v1.10.0
-  - uses: bufbuild/buf-setup-action@vv1.10.0
+  - uses: bufbuild/buf-setup-action@v1.10.0
     with:
-      version: v1.10.0
-  # Should output v1.10.0
+      version: 1.10.0
+  # Should output 1.10.0
   - run: buf --version
 ```
 
@@ -66,7 +66,7 @@ recommended:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@vv1.10.0
+  - uses: bufbuild/buf-setup-action@v1.10.0
     with:
       version: latest
   - run: buf --version
@@ -79,7 +79,7 @@ This may prevent rate limit issues when running on GitHub hosted runners:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@vv1.10.0
+  - uses: bufbuild/buf-setup-action@v1.10.0
     with:
       github_token: ${{ github.token }}
 ```
@@ -123,7 +123,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@vv1.10.0
+  - uses: bufbuild/buf-setup-action@v1.10.0
   # Install `protoc`
   - uses: arduino/setup-protoc@v1
 ```
@@ -139,4 +139,4 @@ steps:
 [compiler]: https://docs.buf.build/build/internal-compiler
 [protoc]: https://github.com/protocolbuffers/protobuf#protocol-compiler-installation
 [setup-protoc]: https://github.com/marketplace/actions/setup-protoc
-[version]: https://github.com/bufbuild/buf/releases/tag/vv1.10.0
+[version]: https://github.com/bufbuild/buf/releases/tag/v1.10.0
