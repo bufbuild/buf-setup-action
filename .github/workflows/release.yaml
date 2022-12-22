@@ -104,7 +104,7 @@ jobs:
         run: |
           git fetch origin
           git switch v1
-          git merge main
+          git merge origin/main
           git push origin v1
       - name: Release
         id: ghr
