@@ -56,6 +56,20 @@ async function runSetup(): Promise<null | Error> {
     );
   }
 
+  const bufToken = core.getInput("buf_token")
+  if (bufToken === "") {
+    return {
+      message: "a buf token was not provided"
+    }
+  }
+
+  const bufUser = core.getInput("buf_user")
+  if (bufUser === "") {
+    return {
+      message: "a buf username was not provided"
+    }
+  }
+
   core.info(`Setting up buf version "${version}"`);
   const installDir = await getBuf(version, githubToken);
   if (isError(installDir)) {
@@ -78,6 +92,8 @@ async function runSetup(): Promise<null | Error> {
 
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
+
+  core.info(cp.execSync(`${binaryPath} registry login --username ${bufUser} --token-stdin`, {input: bufToken}).toString())
 
   return null;
 }
