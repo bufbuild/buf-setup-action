@@ -58,8 +58,7 @@ async function runSetup(): Promise<null | Error> {
 
   const bufToken = core.getInput("buf_token");
   const bufUser = core.getInput("buf_user");
-  core.info("user and token: " + bufUser + " " + bufToken);
-  core.info("i am logging here!");
+
   core.info(`Setting up buf version "${version}"`);
   const installDir = await getBuf(version, githubToken);
   if (isError(installDir)) {
@@ -83,6 +82,7 @@ async function runSetup(): Promise<null | Error> {
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
   if (bufUser !== "" && bufToken !== "") {
+    core.info(`buf_user and buf_token supplied, logging in...`);
     core.info(
       cp
         .execSync(
