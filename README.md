@@ -32,7 +32,7 @@ You can configure `buf-setup-action` with these parameters:
 |:---------------|:---------------------------------------------------|:-------------------|
 | `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.11.0`][version] |
 | `github_token` | The GitHub token to use when making API requests   |                    |
-| `buf_user`     | The The username to use for logging into Buf Schema registry.                                               |                    |
+| `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
 
 > These parameters are derived from [`action.yml`](./action.yml). <br>
