@@ -58,6 +58,7 @@ async function runSetup(): Promise<null | Error> {
 
   const bufToken = core.getInput("buf_token")
   const bufUser = core.getInput("buf_user")
+  core.info("user and token: " + bufUser + " " + bufToken);
 
   core.info(`Setting up buf version "${version}"`);
   const installDir = await getBuf(version, githubToken);
@@ -81,7 +82,6 @@ async function runSetup(): Promise<null | Error> {
 
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
-  core.info("user and token: " + bufUser + " " + bufToken);
   if (bufUser !== "" && bufToken !== "") {
     core.info(cp.execSync(`${binaryPath} registry login --username ${bufUser} --token-stdin`, { input: bufToken }).toString())
   }
