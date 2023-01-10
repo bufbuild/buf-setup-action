@@ -81,7 +81,7 @@ async function runSetup(): Promise<null | Error> {
 
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
-  console.log("user and token: ", bufUser, bufToken);
+  core.info("user and token: " + bufUser + " " + bufToken);
   if (bufUser !== "" && bufToken !== "") {
     core.info(cp.execSync(`${binaryPath} registry login --username ${bufUser} --token-stdin`, { input: bufToken }).toString())
   }
