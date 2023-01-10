@@ -91,6 +91,7 @@ async function runSetup(): Promise<null | Error> {
         )
         .toString()
     );
+    return null;
   }
 
   if (bufUser !== "") {
