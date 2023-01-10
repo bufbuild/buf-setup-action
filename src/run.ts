@@ -93,12 +93,16 @@ async function runSetup(): Promise<null | Error> {
     );
   } else {
     if (bufUser !== "") {
-      core.info(`buf_user is supplied, must also supply buf_token to log in`);
+      core.info(
+        `buf_user is supplied, must also supply buf_token to log into Buf registry`
+      );
     } else if (bufToken !== "") {
-      core.info(`buf_token is supplied, must also supply buf_user to log in`);
+      core.info(
+        `buf_token is supplied, must also supply buf_user to log into Buf registry`
+      );
     } else {
       core.info(
-        `buf_user and buf_token are not supplied, not logging into buf registry`
+        `buf_user and buf_token are not supplied, not logging into Buf registry`
       );
     }
   }
