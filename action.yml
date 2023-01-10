@@ -13,10 +13,10 @@ inputs:
     description: The GitHub token to use when making API requests.
     required: false
   buf_user:
-    description: The Buf username to use for logging into buf registry.
+    description: The username to use for logging into Buf Schema registry.
     required: false
-  buf_token:
-    description: The Buf token to use for logging into buf registry.
+  buf_api_token:
+    description: The API token to use for logging into Buf Schema registry.
     required: false
 runs:
   using: "node16"

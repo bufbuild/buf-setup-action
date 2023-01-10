@@ -32,9 +32,10 @@ You can configure `buf-setup-action` with these parameters:
 |:---------------|:---------------------------------------------------|:-------------------|
 | `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.11.0`][version] |
 | `github_token` | The GitHub token to use when making API requests   |                    |
+| `buf_user`     | The The username to use for logging into Buf Schema registry.                                               |                    |
+| `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
 
-> These parameters are derived from [`action.yml`](./action.yml).
-
+> These parameters are derived from [`action.yml`](./action.yml). <br>
 ### Version
 
 If `version` is unspecified, the latest version of `buf` is installed:
@@ -82,6 +83,21 @@ steps:
   - uses: bufbuild/buf-setup-action@v1.11.0
     with:
       github_token: ${{ github.token }}
+```
+
+### Buf username and Buf API token
+
+Optionally, you can supply both `buf_user` and `buf_api_token` input so that it will perform BSR authentication
+at the same time. Then you do not need to authenticate with the [Buf Schema Registry][bsr] (BSR) directly from a workflow step.
+This only works when both `buf_user` and `buf_api_token` are supplied at the same time:
+
+```yaml
+steps:
+  - uses: bufbuild/buf-setup-action@v1.11.0
+    with:
+      buf_user: ${{ secrets.buf_user }}
+      buf_api_token: ${{ secrets.buf_api_token }}
+# you can authenticate in this way without specifying env.BUF_TOKEN 
 ```
 
 ### Buf token

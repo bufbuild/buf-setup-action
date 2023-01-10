@@ -79,15 +79,15 @@ async function runSetup(): Promise<null | Error> {
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
 
-  const bufToken = core.getInput("buf_token");
   const bufUser = core.getInput("buf_user");
-  if (bufUser !== "" && bufToken !== "") {
+  const bufAPIToken = core.getInput("buf_api_token");
+  if (bufUser !== "" && bufAPIToken !== "") {
     core.info(`buf_user and buf_token supplied, logging in...`);
     core.info(
       cp
         .execSync(
           `${binaryPath} registry login --username ${bufUser} --token-stdin`,
-          { input: bufToken }
+          { input: bufAPIToken }
         )
         .toString()
     );
@@ -96,7 +96,7 @@ async function runSetup(): Promise<null | Error> {
       core.info(
         `buf_user is supplied, must also supply buf_token to log into Buf registry`
       );
-    } else if (bufToken !== "") {
+    } else if (bufAPIToken !== "") {
       core.info(
         `buf_token is supplied, must also supply buf_user to log into Buf registry`
       );
