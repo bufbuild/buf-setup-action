@@ -12,6 +12,12 @@ inputs:
   github_token:
     description: The GitHub token to use when making API requests.
     required: false
+  buf_token:
+    description: blah blah blah
+    required: false
+  user_token:
+    description: blah blah blah
+    required: false
 runs:
   using: "node16"
   main: "./dist/main.js"

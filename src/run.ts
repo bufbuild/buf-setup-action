@@ -59,7 +59,7 @@ async function runSetup(): Promise<null | Error> {
   const bufToken = core.getInput("buf_token")
   const bufUser = core.getInput("buf_user")
   core.info("user and token: " + bufUser + " " + bufToken);
-
+  core.info("i am logging here!")
   core.info(`Setting up buf version "${version}"`);
   const installDir = await getBuf(version, githubToken);
   if (isError(installDir)) {
