@@ -56,9 +56,6 @@ async function runSetup(): Promise<null | Error> {
     );
   }
 
-  const bufToken = core.getInput("buf_token");
-  const bufUser = core.getInput("buf_user");
-
   core.info(`Setting up buf version "${version}"`);
   const installDir = await getBuf(version, githubToken);
   if (isError(installDir)) {
@@ -81,6 +78,9 @@ async function runSetup(): Promise<null | Error> {
 
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
+
+  const bufToken = core.getInput("buf_token");
+  const bufUser = core.getInput("buf_user");
   if (bufUser !== "" && bufToken !== "") {
     core.info(`buf_user and buf_token supplied, logging in...`);
     core.info(
@@ -91,6 +91,16 @@ async function runSetup(): Promise<null | Error> {
         )
         .toString()
     );
+  } else {
+    if (bufUser !== "") {
+      core.info(`buf_user is supplied, must also supply buf_token to log in`);
+    } else if (bufToken !== "") {
+      core.info(`buf_token is supplied, must also supply buf_user to log in`);
+    } else {
+      core.info(
+        `buf_user and buf_token are not supplied, not logging into buf registry`
+      );
+    }
   }
 
   return null;
