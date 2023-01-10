@@ -15,7 +15,7 @@ inputs:
   buf_token:
     description: blah blah blah
     required: false
-  user_token:
+  buf_user:
     description: blah blah blah
     required: false
 runs:
