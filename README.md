@@ -26,6 +26,8 @@ steps:
 
 ## Configuration
 
+### Parameters
+
 You can configure `buf-setup-action` with these parameters:
 
 | Parameter      | Description                                        | Default            |
@@ -36,7 +38,7 @@ You can configure `buf-setup-action` with these parameters:
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
 
 > These parameters are derived from [`action.yml`](./action.yml). <br>
-### Version
+#### Version
 
 If `version` is unspecified, the latest version of `buf` is installed:
 
@@ -73,7 +75,7 @@ steps:
   - run: buf --version
 ```
 
-### GitHub token
+#### GitHub token
 
 Optionally, you can supply a `github_token` input so that any GitHub API requests are authenticated.
 This may prevent rate limit issues when running on GitHub hosted runners:
@@ -85,7 +87,7 @@ steps:
       github_token: ${{ github.token }}
 ```
 
-### Buf username and Buf API token
+#### Buf username and Buf API token
 
 Optionally, you can supply both `buf_user` and `buf_api_token` input so that it will perform BSR authentication
 at the same time. Then you do not need to authenticate with the [Buf Schema Registry][bsr] (BSR) directly from a workflow step.
@@ -100,7 +102,9 @@ steps:
 # you can authenticate in this way without specifying env.BUF_TOKEN 
 ```
 
-### Buf token
+### Other Configurations
+
+#### Buf token
 
 When calling the `buf` command directly from a workflow step, you may need to authenticate with the
 [Buf Schema Registry][bsr] (BSR). You can authenticate by setting the [`BUF_TOKEN`][buf-token]
@@ -112,7 +116,7 @@ env:
   BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
 ```
 
-### Installing `protoc`
+#### Installing `protoc`
 
 In most cases, you _don't_ need to install [`protoc`][protoc] for Buf's GitHub Actions, but some
 `protoc` plugins are built into the compiler itself. If you need to execute one of these plugins,
