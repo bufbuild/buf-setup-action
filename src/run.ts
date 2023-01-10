@@ -91,21 +91,24 @@ async function runSetup(): Promise<null | Error> {
         )
         .toString()
     );
-  } else {
-    if (bufUser !== "") {
-      core.info(
-        `buf_user is supplied, must also supply buf_token to log into Buf Schema Registry`
-      );
-    } else if (bufAPIToken !== "") {
-      core.info(
-        `buf_token is supplied, must also supply buf_user to log into Buf Schema Registry`
-      );
-    } else {
-      core.info(
-        `buf_user and buf_token are not supplied, not logging into Buf Schema Registry`
-      );
-    }
   }
 
+  if (bufUser !== "") {
+    core.info(
+      `buf_user is supplied, must also supply buf_token to log into Buf Schema Registry`
+    );
+    return null;
+  }
+
+  if (bufAPIToken !== "") {
+    core.info(
+      `buf_token is supplied, must also supply buf_user to log into Buf Schema Registry`
+    );
+    return null;
+  }
+
+  core.info(
+    `buf_user and buf_token are not supplied, not logging into Buf Schema Registry`
+  );
   return null;
 }
