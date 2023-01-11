@@ -89,9 +89,10 @@ steps:
 
 #### Buf username and Buf API token
 
-Optionally, you can supply both `buf_user` and `buf_api_token` input so that it will perform BSR authentication
-at the same time. Then you do not need to authenticate with the [Buf Schema Registry][bsr] (BSR) directly from a workflow step.
-This only works when both `buf_user` and `buf_api_token` are supplied at the same time:
+Optionally, you can supply both `buf_user` and `buf_api_token` input so that it will perform 
+[Buf Schema Registry][bsr] (BSR) authentication at the same time. This will allow you to access 
+the private remote packages in BSR. This only works when both `buf_user` and `buf_api_token` are
+supplied at the same time:
 
 ```yaml
 steps:
@@ -99,7 +100,6 @@ steps:
     with:
       buf_user: ${{ secrets.buf_user }}
       buf_api_token: ${{ secrets.buf_api_token }}
-# you can authenticate in this way without specifying env.BUF_TOKEN 
 ```
 
 ### Other Configurations
@@ -107,7 +107,7 @@ steps:
 #### Buf token
 
 When calling the `buf` command directly from a workflow step, you may need to authenticate with the
-[Buf Schema Registry][bsr] (BSR). You can authenticate by setting the [`BUF_TOKEN`][buf-token]
+BSR. You can authenticate by setting the [`BUF_TOKEN`][buf-token]
 environment variable. If you have a GitHub secret called `BUF_TOKEN`, for example, you can set the
 `BUF_TOKEN`  environment variable like this:
 
@@ -115,6 +115,10 @@ environment variable. If you have a GitHub secret called `BUF_TOKEN`, for exampl
 env:
   BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
 ```
+
+Note that this only authenticate you with the `buf` cli. You cannot access your private remote 
+packages in BSR. If you need to access your private remote packages, supply the username and Buf
+API Token [as parameters](#buf-username-and-buf-api-token). 
 
 #### Installing `protoc`
 
