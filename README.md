@@ -26,16 +26,19 @@ steps:
 
 ## Configuration
 
+### Input
+
 You can configure `buf-setup-action` with these parameters:
 
 | Parameter      | Description                                        | Default            |
 |:---------------|:---------------------------------------------------|:-------------------|
 | `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.11.0`][version] |
 | `github_token` | The GitHub token to use when making API requests   |                    |
+| `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
+| `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
 
-> These parameters are derived from [`action.yml`](./action.yml).
-
-### Version
+> These parameters are derived from [`action.yml`](./action.yml). <br>
+#### Version
 
 If `version` is unspecified, the latest version of `buf` is installed:
 
@@ -72,7 +75,7 @@ steps:
   - run: buf --version
 ```
 
-### GitHub token
+#### GitHub token
 
 Optionally, you can supply a `github_token` input so that any GitHub API requests are authenticated.
 This may prevent rate limit issues when running on GitHub hosted runners:
@@ -84,10 +87,24 @@ steps:
       github_token: ${{ github.token }}
 ```
 
-### Buf token
+#### Buf username and Buf API token
+
+If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-packages/overview) you may need to authenticate the entire system to successfully communicate with the [Buf Schema Registry][bsr]. To achieve this, supply both `buf_user` and `buf_api_token`. This will add your auth credentials to the `.netrc` and allow you to access the BSR from anything in your `PATH`. 
+
+```yaml
+steps:
+  - uses: bufbuild/buf-setup-action@v1.11.0
+    with:
+      buf_user: ${{ secrets.buf_user }}
+      buf_api_token: ${{ secrets.buf_api_token }}
+```
+
+### Other Configurations
+
+#### Buf token
 
 When calling the `buf` command directly from a workflow step, you may need to authenticate with the
-[Buf Schema Registry][bsr] (BSR). You can authenticate by setting the [`BUF_TOKEN`][buf-token]
+BSR. You can authenticate by setting the [`BUF_TOKEN`][buf-token]
 environment variable. If you have a GitHub secret called `BUF_TOKEN`, for example, you can set the
 `BUF_TOKEN`  environment variable like this:
 
@@ -96,7 +113,11 @@ env:
   BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
 ```
 
-### Installing `protoc`
+Note that this only authenticate you with the `buf` cli. You cannot access your private remote 
+packages in BSR. If you need to access your private remote packages, supply the username and Buf
+API Token [as parameters](#buf-username-and-buf-api-token). 
+
+#### Installing `protoc`
 
 In most cases, you _don't_ need to install [`protoc`][protoc] for Buf's GitHub Actions, but some
 `protoc` plugins are built into the compiler itself. If you need to execute one of these plugins,
