@@ -89,10 +89,7 @@ steps:
 
 #### Buf username and Buf API token
 
-Optionally, you can supply both `buf_user` and `buf_api_token` input so that it will perform 
-[Buf Schema Registry][bsr] (BSR) authentication at the same time. This will allow you to access 
-the private remote packages in BSR. This only works when both `buf_user` and `buf_api_token` are
-supplied at the same time:
+If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-packages/overview) you may need to authenticate the entire system to successfully communicate with the [Buf Schema Registry][bsr]. To achieve this, supply both `buf_user` and `buf_api_token`. This will add your auth credentials to the `.netrc` and allow you to access the BSR from anything in your `PATH`. 
 
 ```yaml
 steps:
@@ -100,7 +97,6 @@ steps:
     with:
       buf_user: ${{ secrets.buf_user }}
       buf_api_token: ${{ secrets.buf_api_token }}
-```
 
 ### Other Configurations
 
