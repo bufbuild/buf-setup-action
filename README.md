@@ -26,7 +26,7 @@ steps:
 
 ## Configuration
 
-### Parameters
+### Input
 
 You can configure `buf-setup-action` with these parameters:
 
