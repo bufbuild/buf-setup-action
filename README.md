@@ -97,6 +97,7 @@ steps:
     with:
       buf_user: ${{ secrets.buf_user }}
       buf_api_token: ${{ secrets.buf_api_token }}
+```
 
 ### Other Configurations
 
