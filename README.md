@@ -36,6 +36,7 @@ You can configure `buf-setup-action` with these parameters:
 | `github_token` | The GitHub token to use when making API requests   |                    |
 | `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
+| `buf_domain`    | The domain of the Buf Schema Registry to login to.     | buf.build |
 
 > These parameters are derived from [`action.yml`](./action.yml). <br>
 #### Version
@@ -116,6 +117,12 @@ env:
 Note that this only authenticate you with the `buf` cli. You cannot access your private remote 
 packages in BSR. If you need to access your private remote packages, supply the username and Buf
 API Token [as parameters](#buf-username-and-buf-api-token). 
+
+#### Buf domain
+
+If you are working with a private BSR then you can set the `buf_domain` input to the domain of
+your instance. Please ensure that you are using a token created on your instance (e.g. `https://buf.example.com/settings/user`) and not from the public BSR at `https://buf.build`.
+
 
 #### Installing `protoc`
 

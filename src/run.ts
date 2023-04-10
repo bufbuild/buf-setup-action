@@ -79,6 +79,7 @@ async function runSetup(): Promise<null | Error> {
   core.info(`Successfully setup buf version ${version}`);
   core.info(cp.execSync(`${binaryPath} --version`).toString());
 
+  const bufDomain = core.getInput("buf_domain");
   const bufUser = core.getInput("buf_user");
   const bufAPIToken = core.getInput("buf_api_token");
   if (bufUser !== "" && bufAPIToken !== "") {
@@ -86,7 +87,7 @@ async function runSetup(): Promise<null | Error> {
     core.info(
       cp
         .execSync(
-          `${binaryPath} registry login --username ${bufUser} --token-stdin`,
+          `${binaryPath} registry login ${bufDomain} --username ${bufUser} --token-stdin`,
           { input: bufAPIToken }
         )
         .toString()
