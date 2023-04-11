@@ -18,6 +18,10 @@ inputs:
   buf_api_token:
     description: The API token to use for logging into Buf Schema registry.
     required: false
+  buf_domain:
+    description: The domain of the Buf Schema Registry to login to.
+    required: false
+    default: 'buf.build'
 runs:
   using: "node16"
   main: "./dist/main.js"
