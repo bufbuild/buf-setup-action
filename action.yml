@@ -8,7 +8,7 @@ inputs:
   version:
     description: The version of buf to set up.
     required: false
-    default: '1.14.0'
+    default: '1.17.0'
   github_token:
     description: The GitHub token to use when making API requests.
     required: false
@@ -19,6 +19,10 @@ inputs:
   buf_api_token:
     description: The API token to use for logging into Buf Schema registry.
     required: false
+  buf_domain:
+    description: The domain of the Buf Schema Registry to login to.
+    required: false
+    default: 'buf.build'
 runs:
   using: "node16"
   main: "./dist/main.js"
