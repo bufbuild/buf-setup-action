@@ -88,6 +88,18 @@ steps:
       github_token: ${{ github.token }}
 ```
 
+The token will need the `contents:read` permission to be able to read the latest release and tag of buf. This permission
+is granted [by default](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token)
+to the `GITHUB_TOKEN` that is created for every workflow run of a Github Action, so it is not necessary to explicitly specify the permission. However,
+you must still pass the token to the action:
+
+```yaml
+steps:
+  - uses: bufbuild/buf-setup-action@v1.17.0
+    with:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 #### Buf username and Buf API token
 
 If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-packages/overview) you may need to authenticate the entire system to successfully communicate with the [Buf Schema Registry][bsr]. To achieve this, supply both `buf_user` and `buf_api_token`. This will add your auth credentials to the `.netrc` and allow you to access the BSR from anything in your `PATH`. 
