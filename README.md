@@ -33,7 +33,7 @@ You can configure `buf-setup-action` with these parameters:
 | Parameter      | Description                                        | Default            |
 |:---------------|:---------------------------------------------------|:-------------------|
 | `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.17.0`][version] |
-| `github_token` | The GitHub token to use when making API requests   |                    |
+| `github_token` | The GitHub token to use when making API requests   |                    | ${{ github.token }}
 | `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
 | `buf_domain`    | The domain of the Buf Schema Registry to login to.     | buf.build |
