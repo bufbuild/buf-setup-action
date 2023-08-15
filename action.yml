@@ -22,6 +22,9 @@ inputs:
     description: The domain of the Buf Schema Registry to login to.
     required: false
     default: 'buf.build'
+  go_version_file:
+    description: The go.mod file to read the buf version from.
+    required: false
 runs:
   using: "node16"
   main: "./dist/main.js"

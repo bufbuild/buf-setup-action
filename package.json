@@ -6,7 +6,8 @@
     "eslint": "eslint --max-warnings 0 .",
     "format": "prettier --write '**/*.{json,js,jsx,ts,tsx,css}' --loglevel error",
     "lint": "npm run eslint && npm run types-check",
-    "types-check": "tsc --noemit"
+    "types-check": "tsc --noemit",
+    "test": "jest --coverage"
   },
   "engineStrict": true,
   "engines": {
@@ -21,11 +22,23 @@
     "https-proxy-agent": "^5.0.1"
   },
   "devDependencies": {
+    "@octokit/core": "^5.0.0",
+    "@types/jest": "^29.5.3",
     "@types/node": "^18.11.18",
-    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.47.1",
     "esbuild": "^0.16.12",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-jest": "^27.2.3",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^29.6.2",
+    "jest-circus": "^29.6.2",
     "prettier": "^2.8.1",
-    "typescript": "^4.9.4"
+    "ts-jest": "^29.1.1",
+    "typescript": "^4.9.5"
   }
 }

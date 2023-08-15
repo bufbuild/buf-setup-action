@@ -18,7 +18,8 @@ import * as path from "path";
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import { getBuf } from "./buf";
-import { Error, isError } from "./error";
+import { resolveVersionInput } from "./version";
+import { type Error, isError } from "./error";
 
 export async function run(): Promise<void> {
   try {
@@ -42,7 +43,7 @@ export async function run(): Promise<void> {
 // runSetup runs the buf-setup action, and returns
 // a non-empty error if it fails.
 async function runSetup(): Promise<null | Error> {
-  const version = core.getInput("version");
+  const version = resolveVersionInput();
   if (version === "") {
     return {
       message: "a version was not provided",

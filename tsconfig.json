@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "lib": ["ES6"],
     "jsx": "preserve",
     "noImplicitAny": true,
@@ -18,6 +18,8 @@
     "noEmit": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUnusedParameters": true
-  }
+    "noUnusedParameters": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules"]
 }
