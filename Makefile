@@ -30,8 +30,12 @@ format: node_modules
 lint: node_modules
 	npm run lint
 
+.PHONY: test
+test: node_modules
+	npm run test
+
 .PHONY: build
-build: node_modules format lint
+build: node_modules format lint test
 	npm run build
 
 .PHONY: updateversion

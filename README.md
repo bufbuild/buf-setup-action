@@ -1,7 +1,7 @@
 # `buf-setup-action`
 
-This [Action] installs the [`buf`][buf-cli] CLI in your GitHub Actions pipelines so that it can be
-used by other Buf Actions:
+This [action] installs the [`buf`][buf-cli] CLI in your GitHub Actions
+pipelines so that it can be used by other Buf Actions:
 
 * [`buf-breaking-action`][buf-breaking]
 * [`buf-lint-action`][buf-lint]
@@ -30,15 +30,17 @@ steps:
 
 You can configure `buf-setup-action` with these parameters:
 
-| Parameter      | Description                                        | Default            |
-|:---------------|:---------------------------------------------------|:-------------------|
-| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.26.1`][version] |
-| `github_token` | The GitHub token to use when making API requests   |                    |
-| `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
-| `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
-| `buf_domain`    | The domain of the Buf Schema Registry to login to.     | buf.build |
+| Parameter         | Description                                                 | Default              |
+|:------------------|:------------------------------------------------------------|:---------------------|
+| `version`         | The version of the [`buf` CLI][buf-cli] to install          | [`v1.26.1`][version] |
+| `github_token`    | The GitHub token to use when making API requests            |                      |
+| `buf_user`        | The username to use for logging into Buf Schema registry.   |                      |
+| `buf_api_token`   | The API token to use for logging into Buf Schema registry.  |                      |
+| `buf_domain`      | The domain of the Buf Schema Registry to login to.          | buf.build            |
+| `go_version_file` | The go.mod file to read the buf version from.               |                      |
 
-> These parameters are derived from [`action.yml`](./action.yml). <br>
+> These parameters are derived from [`action.yml`](./action.yml).
+
 #### Version
 
 If `version` is unspecified, the latest version of `buf` is installed:
@@ -102,7 +104,7 @@ steps:
 
 #### Buf username and Buf API token
 
-If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-packages/overview) you may need to authenticate the entire system to successfully communicate with the [Buf Schema Registry][bsr]. To achieve this, supply both `buf_user` and `buf_api_token`. This will add your auth credentials to the `.netrc` and allow you to access the BSR from anything in your `PATH`. 
+If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-packages/overview) you may need to authenticate the entire system to successfully communicate with the [Buf Schema Registry][bsr]. To achieve this, supply both `buf_user` and `buf_api_token`. This will add your auth credentials to the `.netrc` and allow you to access the BSR from anything in your `PATH`.
 
 ```yaml
 steps:
@@ -126,15 +128,14 @@ env:
   BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
 ```
 
-Note that this only authenticate you with the `buf` cli. You cannot access your private remote 
+Note that this only authenticate you with the `buf` cli. You cannot access your private remote
 packages in BSR. If you need to access your private remote packages, supply the username and Buf
-API Token [as parameters](#buf-username-and-buf-api-token). 
+API Token [as parameters](#buf-username-and-buf-api-token).
 
 #### Buf domain
 
 If you are working with a private BSR then you can set the `buf_domain` input to the domain of
 your instance. Please ensure that you are using a token created on your instance (e.g. `https://buf.example.com/settings/user`) and not from the public BSR at `https://buf.build`.
-
 
 #### Installing `protoc`
 
@@ -169,7 +170,6 @@ steps:
 ```
 
 [action]: https://docs.github.com/actions
-[breaking]: https://docs.buf.build/breaking
 [bsr]: https://docs.buf.build/bsr
 [buf-breaking]: https://github.com/marketplace/actions/buf-breaking
 [buf-cli]: https://github.com/bufbuild/buf

@@ -2,3 +2,4 @@
 .tmp/
 .vscode/
 node_modules/
+coverage/
