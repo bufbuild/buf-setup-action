@@ -19,7 +19,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
   # Ensure that `buf` is installed
   - run: buf --version
 ```
@@ -47,7 +47,7 @@ If `version` is unspecified, the latest version of `buf` is installed:
 steps:
   - uses: actions/checkout@v2
   # Installs latest
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
   - run: buf --version
 ```
 
@@ -56,8 +56,8 @@ Use the `version` parameter to pin to a specific version:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  # Installs version 1.27.1
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  # Installs version 1.27.1-1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
     with:
       version: 1.27.1
   # Should output 1.27.1
@@ -70,7 +70,7 @@ recommended:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
     with:
       version: latest
   - run: buf --version
@@ -83,7 +83,7 @@ This may prevent rate limit issues when running on GitHub hosted runners:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
     with:
       github_token: ${{ github.token }}
 ```
@@ -95,7 +95,7 @@ you must still pass the token to the action:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
     with:
       github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -106,7 +106,7 @@ If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-pac
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
     with:
       buf_user: ${{ secrets.buf_user }}
       buf_api_token: ${{ secrets.buf_api_token }}
@@ -163,7 +163,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@v1.27.1
+  - uses: bufbuild/buf-setup-action@v1.27.1-1
   # Install `protoc`
   - uses: arduino/setup-protoc@v1
 ```
