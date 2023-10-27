@@ -126,7 +126,7 @@ async function getDownloadURL(
   let assetName = "";
 
   // See: https://github.com/bufbuild/buf-setup-action/issues/166
-  if (platform === "Linux" && architecture === "arm64" {
+  if (platform === "Linux" && architecture === "arm64") {
     architecture = "aarch64"
   }
   
