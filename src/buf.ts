@@ -124,6 +124,12 @@ async function getDownloadURL(
   // The asset name is determined by the buf release structure found at:
   // https://github.com/bufbuild/buf/blob/8255257bd94c9f1b5faa27242211c5caad05be79/make/buf/scripts/release.bash#L102
   let assetName = "";
+
+  // See: https://github.com/bufbuild/buf-setup-action/issues/166
+  if (platform === "Linux" && architecture === "arm64") {
+    architecture = "aarch64";
+  }
+
   // For Windows, we only download the .exe for `buf` CLI
   if (platform === "Windows") {
     assetName = `buf-${platform}-${architecture}.exe`;
