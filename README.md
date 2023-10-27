@@ -32,7 +32,7 @@ You can configure `buf-setup-action` with these parameters:
 
 | Parameter      | Description                                        | Default            |
 |:---------------|:---------------------------------------------------|:-------------------|
-| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.27.1-1`][version] |
+| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.27.1`][version] |
 | `github_token` | The GitHub token to use when making API requests   |                    |
 | `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
@@ -59,8 +59,8 @@ steps:
   # Installs version 1.27.1-1
   - uses: bufbuild/buf-setup-action@v1.27.1-1
     with:
-      version: 1.27.1-1
-  # Should output 1.27.1-1
+      version: 1.27.1
+  # Should output 1.27.1
   - run: buf --version
 ```
 
@@ -179,4 +179,4 @@ steps:
 [compiler]: https://docs.buf.build/build/internal-compiler
 [protoc]: https://github.com/protocolbuffers/protobuf#protocol-compiler-installation
 [setup-protoc]: https://github.com/marketplace/actions/setup-protoc
-[version]: https://github.com/bufbuild/buf/releases/tag/v1.27.1-1
+[version]: https://github.com/bufbuild/buf/releases/tag/v1.27.1
