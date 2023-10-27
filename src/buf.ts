@@ -127,9 +127,9 @@ async function getDownloadURL(
 
   // See: https://github.com/bufbuild/buf-setup-action/issues/166
   if (platform === "Linux" && architecture === "arm64") {
-    architecture = "aarch64"
+    architecture = "aarch64";
   }
-  
+
   // For Windows, we only download the .exe for `buf` CLI
   if (platform === "Windows") {
     assetName = `buf-${platform}-${architecture}.exe`;
