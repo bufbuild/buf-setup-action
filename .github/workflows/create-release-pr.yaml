@@ -11,6 +11,7 @@ permissions:
   pull-requests: write
 env:
   VERSION: ${{ github.event.inputs.version }}
+  APP_ID: 257262
 jobs:
   update_version:
     runs-on: ubuntu-latest
@@ -21,6 +22,12 @@ jobs:
         run: |
           echo "error: version must not start with 'v'."
           exit 1
+      - name: Get GitHub app token
+        uses: actions/create-github-app-token@v1
+        id: app_token
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ secrets.TOKEN_EXCHANGE_GH_APP_PRIVATE_KEY }}
       - name: Checkout repository code
         uses: actions/checkout@v3
       - uses: actions/setup-go@v3
@@ -39,4 +46,4 @@ jobs:
           git push --set-upstream origin --force ${BRANCH} 
           gh pr create --title "Release v${VERSION}" --body "Release prepared for ${VERSION}"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
