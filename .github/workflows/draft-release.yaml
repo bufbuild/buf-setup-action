@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release')) }}
     steps:
+      - name: Validate input version
+        if: ${{ startsWith(github.event.inputs.version, 'v') }}
+        run: |
+          echo "error: version must not start with 'v'."
+          exit 1
       - name: Set VERSION variable
         # The head ref looks like release/v1.0.0, and we need to trim the string up to the `/v`.
         run: |
