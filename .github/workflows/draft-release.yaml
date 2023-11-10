@@ -9,6 +9,8 @@ on:
         description: The released CLI version without 'v'. For example, 1.0.0.
 permissions:
   contents: write
+env:
+  APP_ID: 257262
 jobs:
   draft_release:
     runs-on: ubuntu-latest
@@ -24,10 +26,16 @@ jobs:
         run: |
           VERSION="${{ github.event.inputs.version || github.head_ref}}"
           echo "VERSION=${VERSION##*/v}" >> $GITHUB_ENV
+      - name: Get GitHub app token
+        uses: actions/create-github-app-token@v1
+        id: app_token
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ secrets.TOKEN_EXCHANGE_GH_APP_PRIVATE_KEY }}
       - name: Checkout repository code
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app_token.outputs.token }}
           fetch-depth: 0
       - name: Sync v1 branch
         run: |
@@ -38,4 +46,4 @@ jobs:
       - name: Release
         run: gh release create --draft --title "v${VERSION}" "v${VERSION}"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
