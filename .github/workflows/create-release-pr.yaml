@@ -1,0 +1,49 @@
+name: Create Release PR
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: The version you intend to release (eg x.y.z)
+        required: true
+permissions:
+  contents: write
+  pull-requests: write
+env:
+  VERSION: ${{ github.event.inputs.version }}
+  APP_ID: 257262
+jobs:
+  update_version:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.version != '' }}
+    steps:
+      - name: Validate input version
+        if: ${{ startsWith(github.event.inputs.version, 'v') }}
+        run: |
+          echo "error: version must not start with 'v'."
+          exit 1
+      - name: Get GitHub app token
+        uses: actions/create-github-app-token@v1
+        id: app_token
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ secrets.TOKEN_EXCHANGE_GH_APP_PRIVATE_KEY }}
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19.x'
+      - name: Update docs Version
+        run: make updateversion VERSION=${{env.VERSION}}
+      - name: Create PR
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          BRANCH="release/v${VERSION}"
+          git switch -C ${BRANCH}
+          git add .
+          git commit -m "Update version to ${VERSION}"
+          git push --set-upstream origin --force ${BRANCH} 
+          gh pr create --title "Release v${VERSION}" --body "Release prepared for ${VERSION}"
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
