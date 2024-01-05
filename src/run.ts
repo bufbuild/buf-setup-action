@@ -83,7 +83,7 @@ async function runSetup(): Promise<null | Error> {
   const bufUser = core.getInput("buf_user");
   const bufAPIToken = core.getInput("buf_api_token");
   if (bufUser !== "" && bufAPIToken !== "") {
-    core.info(`buf_user and buf_token supplied, logging in...`);
+    core.info(`buf_user and buf_api_token supplied, logging in...`);
     core.info(
       cp
         .execSync(
@@ -97,20 +97,20 @@ async function runSetup(): Promise<null | Error> {
 
   if (bufUser !== "") {
     core.info(
-      `buf_user is supplied, must also supply buf_token to log into Buf Schema Registry`
+      `buf_user is supplied, must also supply buf_api_token to log into Buf Schema Registry`
     );
     return null;
   }
 
   if (bufAPIToken !== "") {
     core.info(
-      `buf_token is supplied, must also supply buf_user to log into Buf Schema Registry`
+      `buf_api_token is supplied, must also supply buf_user to log into Buf Schema Registry`
     );
     return null;
   }
 
   core.info(
-    `buf_user and buf_token are not supplied, not logging into Buf Schema Registry`
+    `buf_user and buf_api_token are not supplied, not logging into Buf Schema Registry`
   );
   return null;
 }
