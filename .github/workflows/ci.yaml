@@ -23,7 +23,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - name: Generate
         run: make generate && make checkgenerate
       - name: Build
