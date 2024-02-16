@@ -2,7 +2,7 @@
   "name": "buf-setup",
   "version": "1.6.0",
   "scripts": {
-    "build": "esbuild --minify --bundle --sourcemap '--define:process.env.NODE_ENV=\"production\"' --outdir=dist --platform=node --target=node16 ./src/main.ts",
+    "build": "esbuild --minify --bundle --sourcemap '--define:process.env.NODE_ENV=\"production\"' --outdir=dist --platform=node --target=node20 ./src/main.ts",
     "eslint": "eslint --max-warnings 0 .",
     "format": "prettier --write '**/*.{json,js,jsx,ts,tsx,css}' --loglevel error",
     "lint": "npm run eslint && npm run types-check",
@@ -10,7 +10,7 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=16",
+    "node": ">=20",
     "npm": ">=8"
   },
   "dependencies": {
