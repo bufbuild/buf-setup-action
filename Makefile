@@ -7,7 +7,7 @@ MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-print-directory
 BIN := .tmp/bin
-COPYRIGHT_YEARS := 2020-2022
+COPYRIGHT_YEARS := 2020-2024
 LICENSE_IGNORE := -e dist\/
 
 UNAME_OS := $(shell uname -s)
