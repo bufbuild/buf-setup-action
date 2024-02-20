@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Buf Technologies, Inc.
+// Copyright 2020-2024 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ const versionPrefix = "v";
 
 export async function getBuf(
   version: string,
-  githubToken: string
+  githubToken: string,
 ): Promise<string | Error> {
   const binaryPath = tc.find("buf", version, os.arch());
   if (binaryPath !== "") {
@@ -45,7 +45,7 @@ export async function getBuf(
   if (downloadURL.endsWith(".tar.gz")) {
     const downloadPath = await tc.downloadTool(downloadURL);
     core.info(
-      `Successfully downloaded buf version "${version}" from ${downloadURL}`
+      `Successfully downloaded buf version "${version}" from ${downloadURL}`,
     );
 
     core.info("Extracting buf...");
@@ -57,17 +57,17 @@ export async function getBuf(
       path.join(extractPath, "buf"),
       "buf",
       version,
-      os.arch()
+      os.arch(),
     );
   } else {
     // For Windows, we only download the .exe for `buf` CLI becasue we do not create `.tar.gz`
     // bundles for Windows releases.
     const downloadPath = await tc.downloadTool(
       downloadURL,
-      "C:\\Users\\runneradmin\\buf-download\\buf.exe"
+      "C:\\Users\\runneradmin\\buf-download\\buf.exe",
     );
     core.info(
-      `Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`
+      `Successfully downloaded buf version "${version}" from ${downloadURL} to ${downloadPath}`,
     );
 
     core.info("Adding buf to the cache...");
@@ -75,7 +75,7 @@ export async function getBuf(
       path.dirname(downloadPath),
       "buf",
       version,
-      os.arch()
+      os.arch(),
     );
   }
   core.info(`Successfully cached buf to ${cacheDir}`);
@@ -86,7 +86,7 @@ export async function getBuf(
 // current architecture and platform.
 async function getDownloadURL(
   version: string,
-  githubToken: string
+  githubToken: string,
 ): Promise<string | Error> {
   let architecture = "";
   switch (os.arch()) {
@@ -152,7 +152,7 @@ async function getDownloadURL(
         owner: "bufbuild",
         repo: "buf",
         per_page: 1,
-      }
+      },
     );
     for (const asset of releases[0].assets) {
       if (assetName === asset.name) {
@@ -170,7 +170,7 @@ async function getDownloadURL(
       owner: "bufbuild",
       repo: "buf",
       tag: tag,
-    }
+    },
   );
   for (const asset of release.assets) {
     if (assetName === asset.name) {

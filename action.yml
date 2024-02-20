@@ -23,5 +23,5 @@ inputs:
     required: false
     default: 'buf.build'
 runs:
-  using: "node16"
+  using: "node20"
   main: "./dist/main.js"

@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Buf Technologies, Inc.
+// Copyright 2020-2024 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ async function runSetup(): Promise<null | Error> {
   const githubToken = core.getInput("github_token");
   if (githubToken === "") {
     core.warning(
-      "No github_token supplied, API requests will be subject to stricter rate limiting"
+      "No github_token supplied, API requests will be subject to stricter rate limiting",
     );
   }
 
@@ -88,29 +88,29 @@ async function runSetup(): Promise<null | Error> {
       cp
         .execSync(
           `${binaryPath} registry login ${bufDomain} --username ${bufUser} --token-stdin`,
-          { input: bufAPIToken }
+          { input: bufAPIToken },
         )
-        .toString()
+        .toString(),
     );
     return null;
   }
 
   if (bufUser !== "") {
     core.info(
-      `buf_user is supplied, must also supply buf_token to log into Buf Schema Registry`
+      `buf_user is supplied, must also supply buf_token to log into Buf Schema Registry`,
     );
     return null;
   }
 
   if (bufAPIToken !== "") {
     core.info(
-      `buf_token is supplied, must also supply buf_user to log into Buf Schema Registry`
+      `buf_token is supplied, must also supply buf_user to log into Buf Schema Registry`,
     );
     return null;
   }
 
   core.info(
-    `buf_user and buf_token are not supplied, not logging into Buf Schema Registry`
+    `buf_user and buf_token are not supplied, not logging into Buf Schema Registry`,
   );
   return null;
 }
