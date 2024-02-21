@@ -32,7 +32,7 @@ You can configure `buf-setup-action` with these parameters:
 
 | Parameter      | Description                                        | Default            |
 |:---------------|:---------------------------------------------------|:-------------------|
-| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.29.0-1`][version] |
+| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.29.0`][version] |
 | `github_token` | The GitHub token to use when making API requests   |                    |
 | `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
@@ -59,8 +59,8 @@ steps:
   # Installs version 1.29.0-1
   - uses: bufbuild/buf-setup-action@v1.29.0-1
     with:
-      version: 1.29.0-1
-  # Should output 1.29.0-1
+      version: 1.29.0
+  # Should output 1.29.0
   - run: buf --version
 ```
 
