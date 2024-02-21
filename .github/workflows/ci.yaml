@@ -29,5 +29,5 @@ jobs:
       - name: Build
         run: make build && make checkgenerate
       - name: Validate Action
-        uses: bufbuild/buf-setup-action@${{ github.sha }}
+        uses: ./
       - run: buf --version
