@@ -8,7 +8,7 @@ inputs:
   version:
     description: The version of buf to set up.
     required: false
-    default: '1.31.0'
+    default: '1.32.0-beta.1'
   github_token:
     description: The GitHub token to use when making API requests.
     required: false
