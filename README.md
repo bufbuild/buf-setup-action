@@ -1,5 +1,10 @@
 # `buf-setup-action`
 
+> [!NOTE]
+> This action has been deprecated in favor of the [`buf-action`][buf-action] which combines the
+> functionality of `buf-setup-action` with the ability to run Buf commands in the same step. Please
+> see the [`buf-action`][buf-action] documentation for more information.
+
 This [Action] installs the [`buf`][buf-cli] CLI in your GitHub Actions pipelines so that it can be
 used by other Buf Actions:
 
@@ -169,6 +174,7 @@ steps:
 ```
 
 [action]: https://docs.github.com/actions
+[buf-action]: https://github.com/bufbuild/buf-action
 [breaking]: https://docs.buf.build/breaking
 [bsr]: https://docs.buf.build/bsr
 [buf-breaking]: https://github.com/marketplace/actions/buf-breaking
