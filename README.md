@@ -1,14 +1,18 @@
 # `buf-setup-action`
 
-This [Action] installs the [`buf`][buf-cli] CLI in your GitHub Actions pipelines so that it can be
-used by other Buf Actions:
+This [Action] has been deprecated in favor of the [`buf-action`][buf-action] which combines the
+functionality of `buf-setup-action` with the ability to run Buf commands in the same step. Please
+see the [`buf-action`][buf-action] documentation for more information.
 
-* [`buf-breaking-action`][buf-breaking]
-* [`buf-lint-action`][buf-lint]
-* [`buf-push-action`][buf-push]
-
-After `buf-setup-action` is run, the `buf` command is available to other Actions in the pipeline's
-`PATH`. You can also use the `buf` command directly inside of workflow steps.
+To replace `buf-setup-action` with `buf-action`, you can use the following configuration:
+```
+steps:
+  - uses: actions/checkout@v4
+  - uses: bufbuild/buf-action@v1
+    with:
+      # Setup only installs the `buf` CLI, it does not run any commands.
+      setup_only: true
+```
 
 ## Usage
 
@@ -169,6 +173,7 @@ steps:
 ```
 
 [action]: https://docs.github.com/actions
+[buf-action]: https://github.com/bufbuild/buf-action
 [breaking]: https://docs.buf.build/breaking
 [bsr]: https://docs.buf.build/bsr
 [buf-breaking]: https://github.com/marketplace/actions/buf-breaking
