@@ -24,7 +24,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
   # Ensure that `buf` is installed
   - run: buf --version
 ```
@@ -37,7 +37,7 @@ You can configure `buf-setup-action` with these parameters:
 
 | Parameter      | Description                                        | Default            |
 |:---------------|:---------------------------------------------------|:-------------------|
-| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.45.0`][version] |
+| `version`      | The version of the [`buf` CLI][buf-cli] to install | [`v1.46.0`][version] |
 | `github_token` | The GitHub token to use when making API requests   |                    |
 | `buf_user`     | The username to use for logging into Buf Schema registry.                                               |                    |
 | `buf_api_token` | The API token to use for logging into Buf Schema registry.                                                                                                            |                    |
@@ -52,7 +52,7 @@ If `version` is unspecified, the latest version of `buf` is installed:
 steps:
   - uses: actions/checkout@v2
   # Installs latest
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
   - run: buf --version
 ```
 
@@ -61,11 +61,11 @@ Use the `version` parameter to pin to a specific version:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  # Installs version 1.45.0
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  # Installs version 1.46.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
     with:
-      version: 1.45.0
-  # Should output 1.45.0
+      version: 1.46.0
+  # Should output 1.46.0
   - run: buf --version
 ```
 
@@ -75,7 +75,7 @@ recommended:
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
     with:
       version: latest
   - run: buf --version
@@ -88,7 +88,7 @@ This may prevent rate limit issues when running on GitHub hosted runners:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
     with:
       github_token: ${{ github.token }}
 ```
@@ -100,7 +100,7 @@ you must still pass the token to the action:
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
     with:
       github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -111,7 +111,7 @@ If you are using Private [Remote Packages](https://docs.buf.build/bsr/remote-pac
 
 ```yaml
 steps:
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
     with:
       buf_user: ${{ secrets.buf_user }}
       buf_api_token: ${{ secrets.buf_api_token }}
@@ -168,7 +168,7 @@ steps:
   # Run `git checkout`
   - uses: actions/checkout@v2
   # Install the `buf` CLI
-  - uses: bufbuild/buf-setup-action@v1.45.0
+  - uses: bufbuild/buf-setup-action@v1.46.0
   # Install `protoc`
   - uses: arduino/setup-protoc@v1
 ```
@@ -185,4 +185,4 @@ steps:
 [compiler]: https://docs.buf.build/build/internal-compiler
 [protoc]: https://github.com/protocolbuffers/protobuf#protocol-compiler-installation
 [setup-protoc]: https://github.com/marketplace/actions/setup-protoc
-[version]: https://github.com/bufbuild/buf/releases/tag/v1.45.0
+[version]: https://github.com/bufbuild/buf/releases/tag/v1.46.0
