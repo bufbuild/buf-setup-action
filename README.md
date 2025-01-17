@@ -3,7 +3,7 @@
 > [!NOTE]
 > This action has been deprecated in favor of the [`buf-action`][buf-action] which combines the
 > functionality of `buf-setup-action` with the ability to run Buf commands in the same step. Please
-> see the [migration guide][buf-action-migrtion] documentation for more information.
+> see the [migration guide][buf-action-migration] documentation for more information.
 
 This [Action] installs the [`buf`][buf-cli] CLI in your GitHub Actions pipelines so that it can be
 used by other Buf Actions:
