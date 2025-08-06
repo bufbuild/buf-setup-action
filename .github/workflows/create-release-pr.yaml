@@ -23,7 +23,7 @@ jobs:
           echo "error: version must not start with 'v'."
           exit 1
       - name: Get GitHub app token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         id: app_token
         with:
           app-id: ${{ env.APP_ID }}
@@ -45,7 +45,7 @@ jobs:
           git switch -C ${BRANCH}
           git add .
           git commit -m "Update version to ${VERSION}"
-          git push --set-upstream origin --force ${BRANCH} 
+          git push --set-upstream origin --force ${BRANCH}
           gh pr create --title "Release v${VERSION}" --body "Release prepared for ${VERSION}"
         env:
           GH_TOKEN: ${{ steps.app_token.outputs.token }}
